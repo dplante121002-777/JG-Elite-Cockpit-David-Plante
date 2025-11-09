@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JG Elite Cockpit | Closing Beast Control Center</title>
+  <style>
+    :root{
+      --neon:#00ff88; --bg:#0b0f0e; --card:#0f1513; --text:#d9ffe9;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 600px at 50% -10%, #042a1b 0%, transparent 70%),
+        radial-gradient(1000px 700px at -10% 120%, #05281b 0%, transparent 65%),
+        radial-gradient(900px 700px at 110% 120%, #05281b 0%, transparent 65%),
+        var(--bg);
+      padding:24px 18px 64px; display:flex; align-items:flex-start; justify-content:center;
+    }
+    .wrap{width:min(900px,100%)}
+
+    h1{
+      margin:12px 0 6px; text-align:center; letter-spacing:.5px;
+      font-size:clamp(28px,6vw,52px); line-height:1.05; color:var(--neon);
+      text-shadow:0 0 20px color-mix(in srgb, var(--neon) 60%, transparent);
+      animation:pop .7s cubic-bezier(.2,.9,.2,1) both .6s;
+    }
+    @keyframes pop{from{transform:scale(.96);opacity:0} to{transform:scale(1);opacity:1}}
+
+    .sub{ text-align:center; opacity:.9; margin-bottom:26px; font-size:clamp(14px,2.4vw,18px); animation:fadeIn .7s ease .85s both}
+    @keyframes fadeIn{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
+
+    .grid{display:grid; gap:18px; grid-template-columns:1fr; margin:0 auto 30px; width:min(820px,100%)}
+    @media (min-width:680px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background:linear-gradient(180deg, color-mix(in srgb, var(--card) 85%, black) 0%, #0a120f 100%);
+      border:1px solid color-mix(in srgb, var(--neon) 15%, #0a0a0a);
+      border-radius:18px; padding:28px 22px; text-align:center; position:relative;
+      box-shadow:0 0 0 1px color-mix(in srgb, var(--neon) 8%, transparent) inset,
+                 0 12px 60px -10px color-mix(in srgb, var(--neon) 30%, transparent);
+      overflow:hidden;
+    }
+    .label{opacity:.9; font-size:18px; margin-bottom:8px}
+    .value{font-size:clamp(34px,9vw,62px); font-weight:800; color:#fff;
+           text-shadow:0 0 12px color-mix(in srgb, var(--neon) 55%, transparent)}
+    .muted{opacity:.75; font-size:13px; margin-top:6px}
+
+    .cta-wrap{display:flex; justify-content:center}
+    .cta{
+      display:inline-block; background:var(--neon); color:#001e10; text-decoration:none;
+      font-weight:800; letter-spacing:.3px; border-radius:14px; padding:16px 22px;
+      min-width:260px; text-align:center; border:1px solid color-mix(in srgb, var(--neon) 30%, black);
+      box-shadow:0 10px 40px -6px color-mix(in srgb, var(--neon) 60%, transparent),
+                 0 0 0 2px color-mix(in srgb, #fff 12%, transparent) inset;
+      transition:transform .12s ease, filter .12s ease;
+    }
+    .cta:active{transform:translateY(1px) scale(.995)}
+    .cta:hover{filter:brightness(1.05)}
+    footer{opacity:.7; text-align:center; font-size:12px; margin-top:26px}
+
+    /* Intro overlay */
+    .intro{position:fixed; inset:0; display:grid; place-items:center; background:rgba(5,10,8,.94); z-index:9999; animation:fadeOut .6s ease 1.8s forwards; pointer-events:none}
+    @keyframes fadeOut{to{opacity:0; visibility:hidden}}
+    .boot{ text-align:center; color:var(--neon); font-weight:700; letter-spacing:.6px;
+           text-shadow:0 0 16px color-mix(in srgb, var(--neon) 60%, transparent); animation:pulse 1.2s ease-in-out infinite}
+    .dots::after{content:""; display:inline-block; width:1.2em; text-align:left; animation:dots 1s steps(3,end) infinite}
+    @keyframes dots{0%{content:""} 33%{content:"."} 66%{content:".."} 100%{content:"..."}}
+    @keyframes pulse{0%,100%{filter:brightness(1); transform:scale(1)} 50%{filter:brightness(1.3); transform:scale(1.02)}}
+  </style>
+</head>
+<body>
+  <!-- Animated Intro -->
+  <div class="intro" aria-hidden="true">
+    <div class="boot">
+      <div style="font-size:28px; margin-bottom:10px;">Booting Beast Mode<span class="dots"></span></div>
+      <div style="font-size:13px; opacity:.85">Calibrating focus • Priming scripts • Charging confidence</div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <h1>JG Elite Cockpit</h1>
+    <div class="sub">Closing Beast Control Center | <strong>David Plante</strong></div>
+
+    <section class="grid">
+      <div class="card">
+        <div class="label">🔥 Paid Deals Today</div>
+        <div class="value" id="paidDeals">0</div>
+        <div class="muted">Verbatim = Victory</div>
+      </div>
+      <div class="card">
+        <div class="label">🪙 Weekly Revenue</div>
+        <div class="value" id="weeklyRevenue">$0</div>
+        <div class="muted">Keep stacking green flags</div>
+      </div>
+      <div class="card">
+        <div class="label">⚡ Power Level</div>
+        <div class="value" id="powerLevel">100%</div>
+        <div class="muted">Mindset • Script • Tonality</div>
+      </div>
+    </section>
+
+    <div class="cta-wrap">
+      <!-- >>> CHANGE ONLY IF YOUR FILE NAME IS DIFFERENT <<< -->
+      <a href="https://dplante121002-777.github.io/JG-Elite-Cockpit-David-Plante/JGW_Elite_Master_v5g.html" class="cta">
+        Activate Beast Mode
+      </a>
+    </div>
+
+    <footer>© 2025 David Plante • Built with Relentless Precision</footer>
+  </main>
+
+  <script>
+    // Tiny number animation (no click needed)
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    function count(el, end, prefix=''){
+      const start = 0, dur = 800, t0 = performance.now();
+      function frame(now){
+        const p = Math.min(1, (now - t0)/dur);
+        const v = Math.round(ease(p) * end);
+        el.textContent = prefix + v.toLocaleString();
+        if(p<1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    window.addEventListener('load', () => {
+      count(document.getElementById('paidDeals'), 0);
+      count(document.getElementById('weeklyRevenue'), 0, '$');
+      // Power level remains 100%
+    });
+  </script>
+</body>
+</html>
