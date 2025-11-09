@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JG Elite Cockpit | David Plante</title>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: linear-gradient(180deg, #000000 0%, #020d08 100%);
+      color: #00ff88;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #39ff14;
+      font-size: clamp(28px, 4vw, 46px);
+      text-shadow: 0 0 20px #00ff88;
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: #cfcfcf;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+    .panel {
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #00ff88;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 30px #00ff8890;
+      transition: all 0.25s ease-in-out;
+    }
+    .panel:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 50px #00ff88;
+    }
+    .metric {
+      font-size: clamp(18px, 3vw, 24px);
+      color: #39ff14;
+      margin-bottom: 10px;
+    }
+    .value {
+      font-size: clamp(30px, 6vw, 48px);
+      font-weight: bold;
+      color: #00ffaa;
+      text-shadow: 0 0 15px #00ff88;
+    }
+    button {
+      background: #39ff14;
+      color: #000;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 0 20px #39ff14a8;
+      cursor: pointer;
+      transition: all 0.25s ease-in-out;
+      margin-top: 25px;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #39ff14;
+    }
+    footer {
+      margin-top: 50px;
+      color: #888;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>JG Elite Cockpit</h1>
+  <h2>Closing Beast Control Center | David Plante</h2>
+
+  <div class="panel">
+    <div class="metric">🔥 Paid Deals Today</div>
+    <div class="value" id="deals">0</div>
+  </div>
+
+  <div class="panel">
+    <div class="metric">💰 Weekly Revenue</div>
+    <div class="value" id="revenue">$0</div>
+  </div>
+
+  <div class="panel">
+    <div class="metric">⚡ Power Level</div>
+    <div class="value" id="power">100%</div>
+  </div>
+
+  <button onclick="boostMode()">Activate Beast Mode</button>
+
+  <footer>© 2025 David Plante | Built with Relentless Precision</footer>
+
+  <script>
+    let deals = 0;
+    let revenue = 0;
+    function boostMode() {
+      deals += Math.floor(Math.random() * 3) + 1;
+      revenue += Math.floor(Math.random() * 800) + 200;
+      document.getElementById('deals').innerText = deals;
+      document.getElementById('revenue').innerText = '$' + revenue.toLocaleString();
+      document.getElementById('power').innerText =
+        (100 + Math.floor(Math.random() * 50)) + '%';
+      document.body.style.background = 'radial-gradient(circle, #001a00, #000)';
+    }
+  </script>
+</body>
+</html>
