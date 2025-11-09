@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>JG Elite Cockpit — David Plante</title>
+<style>
+  :root{
+    --neon:#00ff88; --neon-dim:#00c06a; --bg:#0b0f0e; --card:#101613; --ink:#d9ffe9;
+    --accent:#7ef9c5; --muted:#9de7c7; --warn:#ffd88a; --bad:#ff9aa0; --good:#9dffb0;
+    --pill:#0e1412; --border:color-mix(in srgb, var(--neon) 18%, #0a0a0a);
+  }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{
+    margin:0; background:radial-gradient(1200px 600px at 50% -10%, #062c1d 0%, transparent 70%),
+    radial-gradient(1000px 700px at -10% 120%, #06271c 0%, transparent 65%),
+    radial-gradient(900px 700px at 110% 120%, #05281b 0%, transparent 65%), var(--bg);
+    color:var(--ink); font-family: ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica, Arial;
+    padding:22px 14px 70px;
+  }
+  .wrap{width:min(1100px,100%); margin-inline:auto}
+  h1{margin:6px 0 8px; text-align:center; font-size:clamp(26px,5.5vw,46px); color:var(--neon);
+     text-shadow:0 0 18px color-mix(in srgb, var(--neon) 60%, transparent); letter-spacing:.3px}
+  .sub{text-align:center; opacity:.9; margin-bottom:18px}
+  .bar{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin:16px 0 22px}
+  .chip{background:var(--pill); border:1px solid var(--border); border-radius:999px; padding:8px 12px; font-size:13px; opacity:.95}
+  .grid{display:grid; grid-template-columns:1fr; gap:16px}
+  @media(min-width:900px){.grid{grid-template-columns:1.2fr .8fr}}
+  .card{
+    background:linear-gradient(180deg, color-mix(in srgb, var(--card) 82%, black) 0%, #0a120f 100%);
+    border:1px solid var(--border); border-radius:18px; padding:18px; box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--neon) 10%, transparent) inset,
+    0 16px 70px -18px color-mix(in srgb, var(--neon) 30%, transparent);
+  }
+  .card h2{margin:0 0 10px; font-size:18px; letter-spacing:.2px}
+  .row{display:grid; grid-template-columns:1fr; gap:10px}
+  @media(min-width:620px){.row{grid-template-columns:1fr 1fr}}
+  label{font-size:12px; opacity:.85}
+  input,select,textarea{
+    width:100%; background:#0b1411; border:1px solid var(--border); color:var(--ink);
+    border-radius:10px; padding:10px 12px; font-size:14px;
+  }
+  textarea{min-height:88px; resize:vertical}
+  .cta, .ghost{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer;
+    border-radius:12px; padding:12px 16px; border:1px solid;
+    text-decoration:none; user-select:none; transition:transform .12s ease, filter .12s ease;
+  }
+  .cta{background:var(--neon); color:#002214; border-color:color-mix(in srgb, var(--neon) 25%, black);
+       box-shadow:0 14px 44px -10px color-mix(in srgb, var(--neon) 60%, transparent);}
+  .ghost{background:#0e1513; color:var(--ink); border-color:var(--border)}
+  .cta:active,.ghost:active{transform:translateY(1px) scale(.995)}
+  .section-head{display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .pill{font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid var(--border); background:#0c1512}
+  .ok{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+  .muted{opacity:.75; font-size:12px}
+  details{border:1px dashed var(--border); border-radius:12px; padding:10px 12px; background:#0b1411}
+  details>summary{cursor:pointer; list-style:none}
+  details>summary::-webkit-details-marker{display:none}
+  .nums{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:8px}
+  .stat{background:#0c1512; border:1px solid var(--border); border-radius:12px; padding:10px}
+  .stat .big{font-size:22px; font-weight:800}
+  .flex{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .hr{height:1px; background:linear-gradient(90deg, transparent, var(--border), transparent); margin:14px 0}
+  .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#16221e; border:1px solid var(--border); padding:1px 6px; border-radius:8px; font-size:12px}
+  .success{background:#0f1d15; border-left:3px solid var(--good); padding:10px 12px; border-radius:10px}
+  .danger{background:#1a1213; border-left:3px solid var(--bad); padding:10px 12px; border-radius:10px}
+  .center{display:flex; justify-content:center}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>JG Elite Cockpit</h1>
+    <div class="sub">Closing Beast Control Center • <strong>David Plante</strong></div>
+
+    <div class="center" style="margin:10px 0 18px">
+      <button class="cta" id="openApp">⚡ Activate Beast Mode</button>
+    </div>
+
+    <!-- APP -->
+    <div id="app" style="display:none">
+      <div class="bar">
+        <div class="chip">Verbatim = Victory</div>
+        <div class="chip">Compliance-First</div>
+        <div class="chip">Ask → Probe → Isolate → Solve → Confirm</div>
+      </div>
+
+      <div class="grid">
+        <!-- LEFT COLUMN: LIVE SCRIPT -->
+        <section class="card">
+          <div class="section-head">
+            <h2>1) Greeting & Identity</h2>
+            <span class="pill">recorded line</span>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Open:</label>
+              <textarea readonly>
+“Hi, this is David with JG Wentworth on a recorded line. Is this [First Last]? Great. Before we dive in, I’ll confirm a few details so I can pull up the right file and see what options you qualify for.”
+              </textarea>
+            </div>
+            <div>
+              <label>Collect (required to review file):</label>
+              <div class="row">
+                <div><input id="fullName" placeholder="Full Legal Name"></div>
+                <div><input id="bestNumber" placeholder="Best Phone #"></div>
+                <div><input id="email" placeholder="Email Address"></div>
+                <div><input id="address" placeholder="Mailing Address (no P.O. Box)"></div>
+                <div><input id="dob" placeholder="Date of Birth (MM/DD/YYYY)"></div>
+                <div><input id="last4" placeholder="Last 4 of SSN"></div>
+              </div>
+              <div class="muted" style="margin-top:6px">
+                • CO residents — send budgeting/collections info email per state requirement. • Always reconfirm last 4 when discussing personal info.
+              </div>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+          <div class="section-head">
+            <h2>2) Credit Pull Permission</h2>
+            <span class="pill">soft inquiry</span>
+          </div>
+          <details>
+            <summary><strong>Say this:</strong> (tap to expand)</summary>
+            <div class="hr"></div>
+            <div class="row">
+              <div>
+                <label>Soft Pull Authorization:</label>
+                <textarea readonly>
+“To see if we can help, may I have your permission to run a soft inquiry with TransUnion? It has no impact on your score and there’s no obligation — it just shows me your accounts and balances so I can match the best option.”
+                </textarea>
+              </div>
+              <div>
+                <label>Compliance Reminders:</label>
+                <ul class="muted">
+                  <li>Obtain permission — do not imply you are pulling without consent.</li>
+                  <li>Disclose credit can be impacted by any debt resolution path later in the call (don’t quote points).</li>
+                </ul>
+              </div>
+            </div>
+          </details>
+
+          <div class="hr"></div>
+          <div class="section-head">
+            <h2>3) State Routing & Disclosures</h2>
+            <span class="pill">auto prompt by state</span>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Client State</label>
+              <select id="state">
+                <option value="">Select State…</option>
+                <option>AL</option><option>AK</option><option>AZ</option><option>AR</option>
+                <option>CA</option><option>CO</option><option>CT</option><option>DC</option>
+                <option>DE</option><option>FL</option><option>GA</option><option>HI</option>
+                <option>IA</option><option>ID</option><option>IL</option><option>IN</option>
+                <option>KS</option><option>KY</option><option>LA</option><option>MA</option>
+                <option>MD</option><option>ME</option><option>MI</option><option>MN</option>
+                <option>MO</option><option>MS</option><option>MT</option><option>NC</option>
+                <option>ND</option><option>NE</option><option>NH</option><option>NJ</option>
+                <option>NM</option><option>NV</option><option>NY</option><option>OH</option>
+                <option>OK</option><option>OR</option><option>PA</option><option>RI</option>
+                <option>SC</option><option>SD</option><option>TN</option><option>TX</option>
+                <option>UT</option><option>VA</option><option>VT</option><option>WA</option>
+                <option>WI</option><option>WV</option><option>WY</option>
+              </select>
+            </div>
+            <div>
+              <label>Routing Outcome</label>
+              <textarea id="stateMsg" readonly></textarea>
+            </div>
+          </div>
+
+          <details style="margin-top:8px">
+            <summary><strong>Verbatim prompts you’ll deliver at the right time</strong></summary>
+            <div class="hr"></div>
+            <ul class="muted">
+              <li><strong>NSL intro (before pull):</strong> “One of the options is a debt resolution program through New Start Legal, a law firm with attorney representation in your state. Would you like to hear more?”</li>
+              <li><strong>NSL/JGW relationship (before agreement send):</strong> Explain NSL is the law firm; JGW provides administrative support; NSL attorneys supervise content; <em>29% service fee</em> is included in the monthly deposit; all restructures reviewed by the law firm; NSL/coverage will assist the client.</li>
+              <li><strong>CO:</strong> Send the consumer education email (budgeting/collectors) and note on the call you’ve sent it.</li>
+              <li><strong>FL:</strong> Read FL cancellation + license/office address + your individual license # (when known) before close.</li>
+              <li><strong>WV:</strong> Use Arnold & Smith attorney-model language (law firm + $24.99/mo legal plan if applicable).</li>
+            </ul>
+          </details>
+
+          <div class="hr"></div>
+          <div class="section-head">
+            <h2>4) Credit Report Deep Dive</h2>
+            <span class="pill">probe & label</span>
+          </div>
+          <div class="row">
+            <div>
+              <label>Five hard-hitting probes (Jeremy Miner style):</label>
+              <textarea readonly>
+1) “Walk me through the last 90 days — which accounts feel heaviest right now and why?”
+2) “If nothing changed, where would balances be six months from now? What’s the risk in waiting?”
+3) “Which two creditors call the most, and what’s their current tone?”
+4) “Of these accounts, which are you most confident we could reduce first — and which might fight us?”
+5) “If we lowered the total and created one predictable deposit, how would that change your monthly stress?”
+              </textarea>
+            </div>
+            <div>
+              <label>Notes (utilization, lates, charge-offs, collectors):</label>
+              <textarea placeholder="List each creditor + balance + status + who’s collecting; note any disputes or AU cards…"></textarea>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+          <div class="section-head">
+            <h2>5) Budget Snapshot → Quote</h2>
+            <span class="pill">calculator below</span>
+          </div>
+          <div class="row">
+            <div>
+              <label>Budget prompts:</label>
+              <textarea readonly>
+“Current total monthly card/loan payments?”
+“Any months you’ve skipped, used BNPL, or borrowed to make minimums?”
+“What’s comfortable for one deposit draft — monthly, semi-monthly or bi-weekly?”
+“What’s your next best alternative if this doesn’t pencil?”
+              </textarea>
+            </div>
+            <div class="success">
+              <strong>Positioning:</strong> “Underwriting sets exact deposits. I’ll model your numbers so you can see the range; final deposit + term arrives with your agreement.”
+            </div>
+          </div>
+
+          <div class="hr"></div>
+          <div class="section-head">
+            <h2>6) Enrollment & Banking</h2>
+            <span class="pill">CFT/Global holdings</span>
+          </div>
+          <div class="row">
+            <div>
+              <label>Banking capture (client input):</label>
+              <div class="row">
+                <div><input id="routing" placeholder="Routing #"></div>
+                <div><input id="account" placeholder="Account #"></div>
+              </div>
+              <div class="muted" style="margin-top:6px">First draft window: choose a date 7–14 days from today. Client selects frequency (Monthly / Semi-Monthly / Bi-Weekly).</div>
+            </div>
+            <div>
+              <label>Draft scheduling helper:</label>
+              <div class="flex">
+                <button class="ghost" id="opt7">+7 days</button>
+                <button class="ghost" id="opt10">+10 days</button>
+                <button class="ghost" id="opt14">+14 days</button>
+              </div>
+              <input id="firstDraft" style="margin-top:8px" placeholder="First draft date (auto-filled when you tap a chip)">
+            </div>
+          </div>
+
+          <div class="hr"></div>
+          <div class="section-head">
+            <h2>7) Objections → Isolate & Resolve</h2>
+            <span class="pill">NEPQ framing</span>
+          </div>
+          <details open>
+            <summary><strong>Top four with quick resolves</strong></summary>
+            <div class="nums">
+              <div class="stat"><div class="muted">“I need to think about it.”</div><div class="big">Clarify → Consequence → Control</div>
+                <div class="muted" style="margin-top:6px">“Totally fair. Just so I know what to send you, is it the monthly deposit, term, or the calls you’re most unsure about? … If you kept things as-is for 6–12 months, what happens to balances and stress? … Let’s lock what you can control: first draft on <span class="kbd">[date]</span> and the attorney review. Underwriting can still adjust deposit by a few dollars either way.”</div>
+              </div>
+              <div class="stat"><div class="muted">“You’ll hurt my credit.”</div><div class="big">Transparency + Trade-off</div>
+                <div class="muted" style="margin-top:6px">“Any debt-relief path impacts credit in the short term — doing nothing usually costs more. The law firm’s goal is to reduce total balances and end the cycle. Credit typically rebuilds once balances are settled and the calls stop.”</div>
+              </div>
+              <div class="stat"><div class="muted">“I only wanted a loan.”</div><div class="big">Re-qualify Fit</div>
+                <div class="muted" style="margin-top:6px">“If a low-rate loan’s available, I’ll point you to it. Based on utilization/income, were you offered anything? If not, this is the option that actually reduces what you owe, not just reshuffles it.”</div>
+              </div>
+              <div class="stat"><div class="muted">“I don’t want to stop paying.”</div><div class="big">Ownership + Counsel</div>
+                <div class="muted" style="margin-top:6px">“That decision is always yours — we don’t tell anyone to stop. The attorneys advise strategy for best outcomes and negotiate when funds accrue in your dedicated account.”</div>
+              </div>
+            </div>
+          </details>
+
+          <div class="hr"></div>
+          <div class="section-head">
+            <h2>8) Close & Next Steps</h2>
+            <span class="pill">welcome call / portals</span>
+          </div>
+          <details>
+            <summary><strong>Wrap script</strong></summary>
+            <div class="hr"></div>
+            <textarea readonly>
+“Over the next 24–48 hours you’ll receive two emails: (1) your FDIC-insured savings portal invite; please log in within 24 hours, and (2) your JG Wentworth client portal. Client Services is M–F 9a–5:30p ET at 800-715-9501. Any questions we didn’t cover yet?”
+            </textarea>
+          </details>
+        </section>
+
+        <!-- RIGHT COLUMN: CALCULATOR + COMPLIANCE -->
+        <section class="card">
+          <div class="section-head">
+            <h2>Quote & Math</h2>
+            <span class="pill">model only — UW sets final</span>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Total Enrolled Debt ($)</label>
+              <input id="debt" type="number" placeholder="e.g., 36000">
+            </div>
+            <div>
+              <label>Current Monthly Payments ($)</label>
+              <input id="curMonthly" type="number" placeholder="Sum of all mins">
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:8px">
+            <div>
+              <label>Assumed ‘do nothing’ cost</label>
+              <input id="triple" type="text" readonly placeholder="3 × total debt (15–20y cost)">
+            </div>
+            <div>
+              <label>Program Fee (default 29%)</label>
+              <div class="row">
+                <div><input id="feePct" type="number" value="29"></div>
+                <div><input id="legalFee" type="number" value="0" placeholder="$24.99 A&S? 0 for most"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:8px">
+            <div>
+              <label>Deposit Frequency</label>
+              <select id="freq">
+                <option value="monthly">Monthly</option>
+                <option value="semi">Semi-Monthly (2×/mo)</option>
+                <option value="biweekly">Bi-Weekly (26/yr)</option>
+              </select>
+            </div>
+            <div>
+              <label>Deposit Amount (you model; UW final)</label>
+              <input id="deposit" type="number" placeholder="e.g., 525">
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:8px">
+            <div>
+              <label>Duration (months)</label>
+              <input id="months" type="number" placeholder="e.g., 48">
+            </div>
+            <div>
+              <label>Total Program Deposits ($)</label>
+              <input id="totalDeposits" readonly>
+            </div>
+          </div>
+
+          <div class="nums">
+            <div class="stat">
+              <div class="muted">Projected Monthly Savings</div>
+              <div class="big" id="monthlySave">$0</div>
+            </div>
+            <div class="stat">
+              <div class="muted">Total Savings vs 3× Debt</div>
+              <div class="big" id="totalSave">$0</div>
+            </div>
+          </div>
+
+          <div class="hr"></div>
+          <div class="section-head">
+            <h2>Creditor Mix Helper</h2>
+            <span class="pill">55% • 60% • 65%</span>
+          </div>
+          <div class="row">
+            <div>
+              <label>% of enrolled debt that is “difficult” creditors (enter rough %)</label>
+              <input id="diffPct" type="number" placeholder="e.g., 35">
+              <div class="muted" style="margin-top:6px">
+                Quick guide: lower difficult-mix → target 55%; moderate → 60%; heavy/hostile → 65%. (Reference your internal matrix/SOP.)
+              </div>
+            </div>
+            <div>
+              <label>Suggested bucket</label>
+              <input id="bucket" readonly placeholder="55% / 60% / 65%">
+            </div>
+          </div>
+
+          <div class="hr"></div>
+          <div class="section-head">
+            <h2>Compliance Quick-Check</h2>
+            <span class="pill">read & record</span>
+          </div>
+          <ul class="muted" style="margin-top:6px">
+            <li>Recorded line disclosed in first 30 seconds (outbound).</li>
+            <li>Ask permission for soft pull (do not imply you already pulled).</li>
+            <li>Client decides whether to stop paying — you never instruct them to stop.</li>
+            <li>Disclose that credit may be impacted; don’t quote points.</li>
+            <li>Program fee disclosed (default 29%).</li>
+            <li>Refer to deposits as “deposits,” not “payments.”</li>
+            <li>Play required state/firm recording where applicable (NSL; avoid AADR if not required).</li>
+            <li>FL: 7-business-day cancel notice + TC5615 + your salesperson license # and office address.</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <footer class="muted" style="margin-top:18px; text-align:center">
+      © 2025 David Plante — Built for speed, compliance, and clarity.
+    </footer>
+  </div>
+
+<script>
+  // Reveal app
+  document.getElementById('openApp').addEventListener('click', () => {
+    document.getElementById('app').style.display = 'block';
+    window.scrollTo({top: document.getElementById('app').offsetTop - 8, behavior:'smooth'});
+  });
+
+  // State routing helper
+  const state = document.getElementById('state');
+  const stateMsg = document.getElementById('stateMsg');
+  state.addEventListener('change', () => {
+    const s = state.value;
+    let msg = '';
+    if(!s){ stateMsg.value=''; return; }
+
+    if(s === 'WV'){
+      msg = [
+        'WV = Arnold & Smith (Attorney-Model).',
+        'Read the A&S disclosure; $24.99/mo legal plan if applicable.',
+        'Deposits via Global Holdings. Must play appropriate law-firm recording.',
+        'Position JG Wentworth as administrative support for the law firm.'
+      ].join(' ');
+    } else if(s === 'CO'){
+      msg = [
+        'CO requires consumer education email (budgeting, collectors) — send now and note it.',
+        'Proceed with NSL/JGW routing per eligibility.',
+      ].join(' ');
+    } else if(s === 'FL'){
+      msg = [
+        'FL = read 7-business-day cancel notice + TC5615 + your salesperson license # + office address before close.'
+      ].join(' ');
+    } else {
+      msg = [
+        'Standard routing: JG Wentworth admin + NSL attorney representation where eligible.',
+        'Must use “deposits” terminology; play NSL recording for NSL enrollments.'
+      ].join(' ');
+    }
+    stateMsg.value = msg;
+  });
+
+  // Draft date helpers (7/10/14 days)
+  const firstDraft = document.getElementById('firstDraft');
+  const setDatePlus = (days) => {
+    const d = new Date(); d.setDate(d.getDate() + days);
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    const yyyy = d.getFullYear();
+    firstDraft.value = `${mm}/${dd}/${yyyy}`;
+  };
+  document.getElementById('opt7').onclick  = () => setDatePlus(7);
+  document.getElementById('opt10').onclick = () => setDatePlus(10);
+  document.getElementById('opt14').onclick = () => setDatePlus(14);
+
+  // QUOTE MATH
+  const $ = (id)=>document.getElementById(id);
+  const fields = ['debt','curMonthly','feePct','legalFee','freq','deposit','months'];
+  fields.forEach(id => $(id).addEventListener(id==='freq'?'change':'input', recalc));
+
+  function recalc(){
+    const debt = +$('debt').value || 0;
+    const curMonthly = +$('curMonthly').value || 0;
+    const feePct = (+$('feePct').value || 0) / 100;
+    const legalFee = +$('legalFee').value || 0; // per month add-on if used
+    const freq = $('freq').value;
+    const deposit = +$('deposit').value || 0;
+    const months = +$('months').value || 0;
+
+    // 3x “do nothing” cost
+    const triple = debt * 3;
+    $('triple').value = money(triple);
+
+    // Normalize deposit to monthly for totals
+    let monthlyDeposit = deposit;
+    if(freq === 'semi'){ monthlyDeposit = deposit * 2; }
+    if(freq === 'biweekly'){ monthlyDeposit = deposit * (26/12); }
+
+    // Total program deposits (estimate): debt + fee% of debt + (legalFee*months)
+    // NOTE: underwriting sets final; this models the envelope and also totals the client’s actual deposits they’ll make.
+    const feeAmt = debt * feePct;
+    const estProgramTotal = monthlyDeposit * months; // what client will actually deposit with chosen schedule
+    const legalTotal = legalFee * months;
+    const programAllIn = estProgramTotal + legalTotal;
+
+    $('totalDeposits').value = money(programAllIn);
+
+    // Savings vs 3x debt
+    const totalSave = Math.max(0, triple - programAllIn);
+    $('totalSave').textContent = money(totalSave);
+
+    // Monthly savings vs current payments
+    const monthlySave = Math.max(0, curMonthly - monthlyDeposit);
+    $('monthlySave').textContent = money(monthlySave);
+
+    // Difficult-creditor bucket helper
+    const diff = +$('diffPct').value || 0;
+    $('bucket').value = (diff < 25) ? '55%' : (diff < 45) ? '60%' : '65%';
+  }
+  // also recalc when diff changes
+  $('diffPct').addEventListener('input', recalc);
+
+  function money(n){ return (isNaN(n)?0:n).toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:0}); }
+
+  // initialize
+  recalc();
+</script>
+</body>
+</html>
