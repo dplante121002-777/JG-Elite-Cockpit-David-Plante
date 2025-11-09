@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JG Elite Cockpit | Beast Mode + Script</title>
+<style>
+  :root{--neon:#00ff88;--bg:#0b0f0e;--card:#111814;--ink:#d9ffe9}
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);
+       background:radial-gradient(1200px 600px at 50% -10%,#042a1b 0%,transparent 70%),
+                  radial-gradient(1000px 700px at -10% 120%,#05281b 0%,transparent 65%),
+                  radial-gradient(900px 700px at 110% 120%,#05281b 0%,transparent 65%),var(--bg);
+       padding:22px 16px 50px;display:flex;justify-content:center}
+  .wrap{width:min(980px,100%)}
+  h1{margin:8px 0 6px;text-align:center;color:var(--neon);
+     text-shadow:0 0 18px rgba(0,255,136,.7);font-size:clamp(28px,6vw,48px)}
+  .sub{text-align:center;opacity:.9;margin-bottom:22px}
+  .grid{display:grid;gap:16px;grid-template-columns:1fr;max-width:860px;margin:0 auto 24px}
+  .card{background:linear-gradient(180deg,rgba(20,32,27,.9),#0a120f);
+        border:1px solid rgba(0,255,136,.18);border-radius:16px;padding:20px;text-align:center;
+        box-shadow:0 10px 40px -10px rgba(0,255,136,.25)}
+  .label{opacity:.9;margin-bottom:6px}
+  .value{font-size:clamp(30px,6.5vw,56px);font-weight:800;color:#fff;
+         text-shadow:0 0 10px rgba(0,255,136,.7)}
+  .muted{opacity:.75;font-size:12px;margin-top:6px}
+
+  .cta{display:inline-block;background:var(--neon);color:#002010;text-decoration:none;font-weight:800;
+       letter-spacing:.3px;border-radius:14px;padding:14px 20px;min-width:240px;text-align:center;
+       box-shadow:0 10px 40px -6px rgba(0,255,136,.6)}
+  .center{display:flex;justify-content:center}
+
+  /* App sections */
+  .app{display:none}
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
+  .tab{background:#0e1713;border:1px solid rgba(0,255,136,.2);color:var(--ink);padding:10px 12px;
+       border-radius:10px;cursor:pointer}
+  .tab.active{background:var(--neon);color:#002010;font-weight:800}
+  .panel{display:none;background:#0d1612;border:1px solid rgba(0,255,136,.15);border-radius:14px;padding:16px}
+  .panel.active{display:block}
+
+  h2{margin:0 0 10px;font-size:20px;color:#a6ffd0}
+  h3{margin:14px 0 8px;font-size:16px;color:#caffea}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  input,select,button,textarea{
+    width:100%;padding:10px;border-radius:10px;border:1px solid rgba(0,255,136,.25);
+    background:#0a120f;color:#eafff5
+  }
+  .note{font-size:12px;opacity:.8}
+  .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#092018;border:1px solid rgba(0,255,136,.25)}
+  .ok{color:#00ff88}
+  .warn{color:#ffd257}
+  .bad{color:#ff6b6b}
+  .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;background:#0b1511;
+       border:1px solid rgba(0,255,136,.25);padding:2px 6px;border-radius:6px}
+
+  /* Hide hero when app is active */
+  .hero{transition:.25s}
+  .hidden{display:none !important}
+  footer{opacity:.7;text-align:center;margin-top:22px;font-size:12px}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <!-- HERO / BEAST MODE -->
+    <section id="hero" class="hero">
+      <h1>JG Elite Cockpit</h1>
+      <div class="sub">Closing Beast Control Center • <b>David Plante</b></div>
+      <div class="grid">
+        <div class="card">
+          <div class="label">🔥 Paid Deals Today</div>
+          <div class="value" id="paidDeals">0</div>
+          <div class="muted">Verbatim = Victory</div>
+        </div>
+        <div class="card">
+          <div class="label">💰 Weekly Revenue</div>
+          <div class="value" id="weeklyRevenue">$0</div>
+          <div class="muted">Keep stacking green flags</div>
+        </div>
+        <div class="card">
+          <div class="label">⚡ Power Level</div>
+          <div class="value" id="powerLevel">100%</div>
+          <div class="muted">Mindset • Script • Tonality</div>
+        </div>
+      </div>
+      <div class="center"><a id="go" href="#" class="cta">Activate Beast Mode</a></div>
+    </section>
+
+    <!-- APP: SCRIPT + STATES + QUOTE CALC + BANKING -->
+    <section id="app" class="app">
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-panel="script">1) Verbatim Script</button>
+        <button class="tab" data-panel="states">2) State Logic</button>
+        <button class="tab" data-panel="quote">3) Quote Calculator</button>
+        <button class="tab" data-panel="bank">4) Banking & First Deposit</button>
+        <button class="tab" data-panel="objs">5) Objections</button>
+        <button class="tab" data-panel="comp">Compliance</button>
+      </div>
+
+      <!-- SCRIPT -->
+      <div id="script" class="panel active">
+        <h2>Opening & Authentication (Compliance-First)</h2>
+        <ol>
+          <li><span class="pill">Intro</span> “Hi, this is <b>David with JG Wentworth</b> on a <b>recorded line</b>. How are you?”</li>
+          <li><span class="pill">Purpose</span> “Looks like you were transferred to me to explore options. I’ll confirm a few details and do a <b>soft credit review</b> — <i>no impact to your score, no obligation</i> — so I can tailor accurate numbers. Sound fair?”</li>
+          <li><span class="pill">Auth</span> “May I have your <b>full name</b>, <b>current address</b>, <b>DOB</b>, and the <b>last 4</b> of your SSN for the <b>soft inquiry</b>?”</li>
+          <li class="note">If joint: “Do I also have your spouse/partner’s permission to run a soft check?”</li>
+        </ol>
+
+        <h2>Credit Report Deep-Dive (5 hard-hitting Qs)</h2>
+        <ol>
+          <li>“Which balances feel <b>most urgent</b> or recent?”</li>
+          <li>“Have any accounts <b>missed payments</b> in the last 90 days?”</li>
+          <li>“What’s the <b>highest interest</b> card or loan right now?”</li>
+          <li>“Any <b>collections/legal</b> notices or repo/charge-offs I should factor in?”</li>
+          <li>“If nothing changes, how long until this feels <b>unmanageable</b>?”</li>
+        </ol>
+
+        <h2>Budget Build</h2>
+        <p>“So I don’t over- or under-quote you, let’s map the budget quickly.”</p>
+        <div class="row">
+          <input id="net" type="number" placeholder="Net monthly income ($)">
+          <input id="rent" type="number" placeholder="Mortgage/Rent ($)">
+        </div>
+        <div class="row">
+          <input id="auto" type="number" placeholder="Auto + Insurance ($)">
+          <input id="utils" type="number" placeholder="Utilities ($)">
+        </div>
+        <div class="row">
+          <input id="food" type="number" placeholder="Food/Gas/Other ($)">
+          <input id="other" type="number" placeholder="Other fixed ($)">
+        </div>
+        <div class="note">Tip: sum to confirm comfort band for deposits.</div>
+
+        <h2>Transition to Options</h2>
+        <p>“Based on what I’m seeing, we’ve got a couple of routes. I’ll show you the hard numbers and you tell me what feels right. Fair?”</p>
+      </div>
+
+      <!-- STATES -->
+      <div id="states" class="panel">
+        <h2>State Logic (quick reference)</h2>
+        <div class="row">
+          <select id="state">
+            <option value="">Select State…</option>
+            <option>CO – Colorado (Enrollment Survey / hold instructions)</option>
+            <option>WV – West Virginia (Arnold & Smith only)</option>
+            <option>FL – Florida</option>
+            <option>CA – California</option>
+            <option>TX – Texas</option>
+            <option>NY – New York</option>
+            <option>NJ – New Jersey</option>
+            <option>PA – Pennsylvania</option>
+            <option>GA – Georgia</option>
+            <option>Other – Use JG AADR/ACDR unless NSL</option>
+          </select>
+          <select id="program">
+            <option value="">Program Type…</option>
+            <option value="JG-AADR">JG – AADR</option>
+            <option value="JG-ACDR">JG – ACDR</option>
+            <option value="NSL">NSL (New Start Legal)</option>
+            <option value="AS">Arnold & Smith (WV only)</option>
+          </select>
+        </div>
+        <h3>Settlement Planning Buckets</h3>
+        <p class="note">Use internal SOP for difficult creditor mix. Quick buckets by % of total debt:</p>
+        <div class="row-3">
+          <div class="pill">55% bucket</div>
+          <div class="pill">60% bucket</div>
+          <div class="pill">65% bucket</div>
+        </div>
+        <h3>Colorado Only</h3>
+        <ul>
+          <li>Enroll, then complete <b>Enrollment Call Survey</b>; place on hold as directed.</li>
+          <li>Follow state-specific disclosures verbatim.</li>
+        </ul>
+        <h3>WV – Arnold & Smith</h3>
+        <ul>
+          <li>“Your state requires a <b>law firm representation</b>. We’re the admin team that supports them.”</li>
+        </ul>
+      </div>
+
+      <!-- QUOTE CALCULATOR -->
+      <div id="quote" class="panel">
+        <h2>Quote Calculator (show, don’t tell)</h2>
+        <div class="row">
+          <input id="totalDebt" type="number" placeholder="Total unsecured debt ($)">
+          <input id="currPay" type="number" placeholder="Current monthly payments ($)">
+        </div>
+        <div class="row">
+          <input id="monthsPaid" type="number" placeholder="Months you’ll keep paying (if no change)">
+          <select id="freq">
+            <option value="monthly" selected>Deposit frequency: Monthly</option>
+            <option value="biweekly">Bi-Weekly</option>
+            <option value="semimonthly">Semi-Monthly</option>
+          </select>
+        </div>
+        <div class="row">
+          <input id="deposit" type="number" placeholder="Program deposit amount ($)">
+          <input id="duration" type="number" placeholder="Program duration (months)">
+        </div>
+        <div class="row">
+          <input id="feePct" type="number" placeholder="Program fee % (state matrix)">
+          <input id="placePct" type="number" placeholder="(Optional) Placement %">
+        </div>
+        <div class="center" style="margin-top:8px"><button id="calc">Run Numbers</button></div>
+        <div id="out" style="margin-top:12px">
+          <h3>Results</h3>
+          <div class="row">
+            <div class="card">
+              <div class="label">If they keep current path</div>
+              <div class="value" id="path3x">$0</div>
+              <div class="muted">Heuristic: ~3× total debt over 15–20 yrs</div>
+            </div>
+            <div class="card">
+              <div class="label">Our total program deposits</div>
+              <div class="value" id="progTotal">$0</div>
+              <div class="muted">Deposit × duration (frequency normalized monthly)</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="card">
+              <div class="label">Monthly savings (vs. current)</div>
+              <div class="value ok" id="moSave">$0</div>
+              <div class="muted">Current monthly – normalized deposit</div>
+            </div>
+            <div class="card">
+              <div class="label">Total savings (3× path – program)</div>
+              <div class="value ok" id="totSave">$0</div>
+              <div class="muted">“Happy face” moment 😄</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BANKING -->
+      <div id="bank" class="panel">
+        <h2>Banking & First Deposit</h2>
+        <div class="row">
+          <input id="routing" placeholder="Routing number">
+          <input id="account" placeholder="Account number">
+        </div>
+        <div class="row">
+          <input id="firstDate" type="date" placeholder="First deposit date">
+          <select id="schFreq">
+            <option>Monthly</option><option>Bi-Weekly</option><option>Semi-Monthly</option>
+          </select>
+        </div>
+        <div class="note">Set first draft 7–14 days out (max) per SOP, then follow schedule.</div>
+        <h3>Verbatim Close (play it safe)</h3>
+        <ul>
+          <li>“You’re authorizing <span class="kbd">first draft on [date]</span> and recurring drafts per schedule. Correct?”</li>
+          <li>“You understand this is a <b>soft pull</b>, we’re not issuing new credit.”</li>
+          <li>“You’ll <b>pause payments</b> to creditors and direct those funds into your <b>program account</b>.”</li>
+        </ul>
+      </div>
+
+      <!-- OBJECTIONS -->
+      <div id="objs" class="panel">
+        <h2>Top Objections (NEPQ-style)</h2>
+        <h3>“I need to think about it.”</h3>
+        <p>“Totally fair. Just so I don’t make assumptions — <i>what parts</i> are you needing to think through?” (isolate)  
+        “If we solved that, is there anything else that would stop you from getting the savings we just mapped?”</p>
+
+        <h3>“You’ll hurt my credit.”</h3>
+        <p>“Good question. We ran a <b>soft pull</b> — no score impact. The program itself affects credit differently than continued late pays. <b>Most clients see temporary dips before rebuilding</b> as settlements post. What concerns you most about that path?”</p>
+
+        <h3>“I only wanted a loan.”</h3>
+        <p>“If a low-APR loan were approved today that actually lowered your total cost, I’d say take it. <b>Based on your DTI/score/utilization, approvals are unlikely or costly.</b> This route lowers total spend without adding new debt.”</p>
+
+        <h3>“I don’t want collectors calling.”</h3>
+        <p>“Understood. Calls can continue in the short term. The point of the program is to <b>resolve balances</b> so calls stop. We also give you the right verbiage and (for legal states) counsel to handle escalations.”</p>
+      </div>
+
+      <!-- COMPLIANCE -->
+      <div id="comp" class="panel">
+        <h2>Compliance Quick-Check</h2>
+        <ul>
+          <li>Recorded line disclosed up front.</li>
+          <li>Soft inquiry language (no score impact, no obligation).</li>
+          <li>State routing: JG AADR/ACDR vs NSL vs Arnold & Smith (WV).</li>
+          <li>Colorado survey/hold instructions when applicable.</li>
+          <li>No promises of specific outcomes; use ranges / SOP buckets (55/60/65%).</li>
+          <li>Banking authorization, first draft timing (7–14 days) and schedule confirmation.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>© 2025 David Plante • Verbatim = Victory • Built for Speed</footer>
+  </main>
+
+<script>
+  // Tiny number “wake up”
+  function animate(id,end,prefix=''){const el=document.getElementById(id);let s=0,step=Math.max(1,Math.ceil(end/40));
+    const t=setInterval(()=>{s+=step;if(s>=end){s=end;clearInterval(t)}el.textContent=prefix+s.toLocaleString()},18)}
+  window.addEventListener('load',()=>{animate('paidDeals',0);animate('weeklyRevenue',0,'$')});
+
+  // Switch from hero to app (no navigation)
+  const go=document.getElementById('go');
+  const hero=document.getElementById('hero');
+  const app=document.getElementById('app');
+  go.addEventListener('click',(e)=>{e.preventDefault();hero.classList.add('hidden');app.style.display='block';window.scrollTo(0,0)});
+
+  // Tabs
+  document.getElementById('tabs').addEventListener('click',(e)=>{
+    const b=e.target.closest('.tab'); if(!b) return;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById(b.dataset.panel).classList.add('active');
+  });
+
+  // Quote calc
+  function val(id){return Number((document.getElementById(id).value||'0').replace(/[, ]/g,''))||0}
+  function normMonthly(freq,deposit){
+    if(freq==='monthly') return deposit;
+    if(freq==='biweekly') return deposit*26/12;
+    if(freq==='semimonthly') return deposit*2;
+    return deposit;
+  }
+  document.getElementById('calc').addEventListener('click',()=>{
+    const totalDebt=val('totalDebt');
+    const currPay=val('currPay');
+    const monthsPaid=val('monthsPaid');
+    const freq=document.getElementById('freq').value;
+    const deposit=val('deposit');
+    const duration=val('duration');
+
+    // Heuristic: 3x total debt path cost
+    const path3x = totalDebt*3;
+
+    // Program total = normalized monthly deposit * duration
+    const normalized = normMonthly(freq, deposit);
+    const progTotal = normalized * duration;
+
+    const moSave = Math.max(0, currPay - normalized);
+    const totSave = Math.max(0, path3x - progTotal);
+
+    function ds(n){return '$'+(Math.round(n)).toLocaleString()}
+
+    document.getElementById('path3x').textContent = ds(path3x);
+    document.getElementById('progTotal').textContent = ds(progTotal);
+    document.getElementById('moSave').textContent = ds(moSave);
+    document.getElementById('totSave').textContent = ds(totSave);
+  });
+</script>
+</body>
+</html>
