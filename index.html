@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>JG Elite Cockpit | Closing Beast Control Center</title>
+<style>
+  :root {
+    --bg: #050808;
+    --card: #0d1117;
+    --accent: #00ff88;
+    --accent2: #00eaff;
+    --muted: #8aa0c8;
+    --text: #e8f0ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: radial-gradient(circle at center, #001a10 0%, #000 100%);
+    color: var(--text);
+    font: 500 16px/1.4 system-ui, Segoe UI, Arial;
+  }
+  .center { text-align: center; }
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 12px auto;
+    max-width: 400px;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
+  }
+  .metric h2 { margin: 0; font-size: 38px; }
+  .metric small { display: block; color: var(--muted); margin-top: 4px; }
+  button, .btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #012;
+    background: var(--accent);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.35);
+    transition: transform 0.2s;
+  }
+  button:hover, .btn:hover { transform: translateY(-2px); }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  /* Trainer hidden by default */
+  #trainer { display: none; padding: 20px; animation: fadein 0.6s ease forwards; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(15px);} to { opacity: 1; transform: translateY(0);} }
+
+  /* --- Trainer styling condensed --- */
+  .section {background:#0d1117;border-radius:16px;padding:14px;margin:14px 0;}
+  h3{margin:0 0 8px;font-size:18px;}
+  input,select,textarea{background:#0b1016;border:1px solid #28365a;color:var(--text);padding:10px;border-radius:10px;width:100%;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .pill{background:#0b1016;border:1px solid #28365a;border-radius:10px;padding:6px 10px;font-size:14px;}
+  .small{font-size:13px;color:var(--muted);}
+  .copy{font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid #2a4578;background:#132340;color:#cfe0ff;cursor:pointer;margin-top:5px;}
+  details{background:#0b1016;border:1px solid #28365a;border-radius:12px;padding:8px;margin:6px 0;}
+  summary{cursor:pointer;}
+</style>
+</head>
+<body>
+
+<!-- COCKPIT DASH -->
+<section id="cockpit" class="center">
+  <h1 style="margin-top:30px;font-size:26px;color:var(--accent)">JG Elite Cockpit</h1>
+  <div style="color:var(--muted);font-size:14px;">Closing Beast Control Center | <b>David Plante</b></div>
+
+  <div class="card metric">
+    <div>🔥</div>
+    <div>Paid Deals Today</div>
+    <h2 id="deals">0</h2>
+    <small>Verbatim = Victory</small>
+  </div>
+
+  <div class="card metric">
+    <div>🪙</div>
+    <div>Weekly Revenue</div>
+    <h2 id="rev">$0</h2>
+    <small>Keep stacking green flags</small>
+  </div>
+
+  <div class="card metric">
+    <div>⚡</div>
+    <div>Power Level</div>
+    <h2>100%</h2>
+    <small>Mindset • Script • Tonality</small>
+  </div>
+
+  <button id="activate">Activate Beast Mode</button>
+
+  <footer>© 2025 David Plante • Built with Relentless Precision</footer>
+</section>
+
+<!-- TRAINER -->
+<section id="trainer">
+  <h2 class="center" style="color:var(--accent)">Beast Mode: NSL / JGW Trainer</h2>
+
+  <div class="section">
+    <h3>1️⃣ State Quick Check</h3>
+    <div class="row">
+      <label>State:
+        <select id="state"></select>
+      </label>
+      <button onclick="checkState()">Check</button>
+    </div>
+    <div id="stateResult" class="small" style="margin-top:8px;"></div>
+  </div>
+
+  <div class="section">
+    <h3>2️⃣ NSL Requirements</h3>
+    <ul class="small">
+      <li>29% program fee</li>
+      <li>Welcome Call 24–72 hours post-enrollment</li>
+      <li>Do NOT select Legal Plan in SF (covered via Higbee Law)</li>
+      <li>Say “deposits,” never “payments”</li>
+      <li>Play NSL recording on every enrollment</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>3️⃣ Quick Calcs</h3>
+    <div class="row">
+      <input id="bal" type="number" placeholder="Total Debt $" />
+      <input id="diff" type="number" placeholder="Difficult % (0-100)" />
+      <button onclick="calc()">Calc</button>
+    </div>
+    <div class="small" id="calcOut" style="margin-top:8px;"></div>
+  </div>
+
+  <div class="section">
+    <h3>4️⃣ NSL Script — Part 3</h3>
+    <div id="p3" class="small">
+      “One of the options is a debt resolution program through New Start Legal, a law firm with attorney representation in your state.”<br><br>
+      “This program is designed to reduce your debt and improve your financial situation. Would you like to hear more about this offer?”
+    </div>
+    <div class="copy" onclick="copyTxt('p3')">Copy Part 3</div>
+  </div>
+
+  <div class="section">
+    <h3>5️⃣ NSL Script — Part 8</h3>
+    <div id="p8" class="small">
+      “Now, let me tell you a bit more about how New Start Legal and JG Wentworth work together. New Start Legal is a law firm that specializes in debt resolution and defense. Because of JG Wentworth’s reputation and success, New Start Legal chose us for administrative support and client service.”<br><br>
+      “New Start Legal has a service fee of 29% of the balances enrolled, and it’s already built in with your new monthly deposit of (deposit $ amount).”<br><br>
+      “All debt reductions are reviewed by the law firm to ensure the terms are in your best interest. New Start Legal is always here to assist you.”
+    </div>
+    <div class="copy" onclick="copyTxt('p8')">Copy Part 8</div>
+  </div>
+
+  <div class="section">
+    <h3>6️⃣ Quick Rebuttals</h3>
+    <details open>
+      <summary>“Is this a loan?”</summary>
+      <div class="small">
+        It’s not a loan—no new credit. NSL attorneys negotiate your unsecured debts; your deposits grow in a dedicated account you control. Fees only apply after an approved settlement starts.
+      </div>
+    </details>
+    <details>
+      <summary>“Will this hurt my credit?”</summary>
+      <div class="small">
+        Short-term yes, but it’s about long-term recovery. Resolved accounts report $0, and you rebuild from there.
+      </div>
+    </details>
+    <details>
+      <summary>“I need to think about it.”</summary>
+      <div class="small">
+        Totally fair. Is it the trust, the monthly deposit, or the credit impact? If we solved that one concern now, would anything else hold you back?
+      </div>
+    </details>
+  </div>
+
+  <button class="btn" onclick="backHome()">⬅ Back to Cockpit</button>
+</section>
+
+<script>
+const NSL = ["CT","DE","GA","HI","IL","KS","ME","MN","NH","NJ","ND","OH","OR","RI","SC","VT","DC","WA","WI","WY"];
+
+const stateSel=document.getElementById('state');
+["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","PR","RI","SC","SD","TN","TX","UT","VT","VA","WA","DC","WV","WI","WY"]
+.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;stateSel.appendChild(o);});
+
+function checkState(){
+  const s=stateSel.value;
+  const box=document.getElementById('stateResult');
+  if(NSL.includes(s)){
+    box.innerHTML=`✅ <b>${s}</b> — NSL (Attorney Model). Use "deposits", 29% fee, play NSL recording.`;
+  }else{
+    box.innerHTML=`⚙️ <b>${s}</b> — Standard JGW (non-attorney) flow.`;
+  }
+}
+
+function calc(){
+  const b=+document.getElementById('bal').value||0;
+  const d=+document.getElementById('diff').value||0;
+  let pct=55;if(d>=25&&d<50)pct=60;else if(d>=50&&d<=60)pct=65;
+  const out=`Est. Settlement: <b>${pct}%</b> ≈ $${(b*pct/100).toLocaleString()} — Manager approval if >60% difficult.`;
+  document.getElementById('calcOut').innerHTML=out;
+}
+
+function copyTxt(id){navigator.clipboard.writeText(document.getElementById(id).innerText);alert('Copied!');}
+
+document.getElementById('activate').addEventListener('click',()=>{
+  document.getElementById('cockpit').style.display='none';
+  document.getElementById('trainer').style.display='block';
+});
+function backHome(){
+  document.getElementById('trainer').style.display='none';
+  document.getElementById('cockpit').style.display='block';
+}
+</script>
+</body>
+</html>
