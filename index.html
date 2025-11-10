@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BEAST MODE — JG / NSL / A&S</title>
+<style>
+  :root{--bg:#06090f;--panel:#0d1420;--ink:#e9f2ff;--muted:#9bb0c8;
+        --glow:#00ffc6;--jg:#1de9b6;--nsl:#69a7ff;--as:#ffb020;--cta:#14f195;}
+  html,body{margin:0;background:
+    radial-gradient(900px 520px at 80% -10%,rgba(0,255,198,.12),transparent),
+    radial-gradient(700px 520px at 10% 110%,rgba(105,167,255,.10),transparent),
+    var(--bg);color:var(--ink);font:500 16px/1.55 system-ui}
+  .wrap{max-width:980px;margin:26px auto;padding:16px}
+  .hero{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .hero h1{margin:0;font-size:22px;letter-spacing:.4px}
+  .glow{box-shadow:0 0 28px rgba(0,255,198,.2) inset,0 0 28px rgba(0,255,198,.15)}
+  .badge{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04)}
+  .panel{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--panel);
+         border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px}
+  select,button,input{font:inherit}
+  select,input{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--ink);
+               border-radius:10px;padding:8px}
+  .btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);
+       background:rgba(255,255,255,.06);color:var(--ink);font-weight:700;cursor:pointer}
+  .btn:active{transform:scale(.98)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .pill{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);font-weight:800}
+  .pill.jg{background:rgba(29,233,182,.12);color:#a6ffe5;border-color:rgba(29,233,182,.55)}
+  .pill.nsl{background:rgba(105,167,255,.12);color:#d8e7ff;border-color:rgba(105,167,255,.55)}
+  .pill.as{background:rgba(255,176,32,.12);color:#ffe2b6;border-color:rgba(255,176,32,.55)}
+  section{margin:14px 0}
+  .tag{display:inline-block;font-size:11px;font-weight:900;padding:6px 10px;border-radius:999px;letter-spacing:.3px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03)}
+  .line{display:flex;gap:8px;align-items:flex-start;margin:8px 0;padding:10px;border-radius:12px;background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.08)}
+  .say{flex:1}
+  .copy .btn{padding:6px 10px}
+  #timer{padding:6px 10px;border:1px solid rgba(255,255,255,.14);border-radius:10px;background:rgba(255,255,255,.05);font-weight:900}
+  details summary{cursor:pointer;font-weight:900}
+  .muted{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="panel glow">
+    <div class="hero">
+      <h1>🚀 BEAST MODE — JG / New Start Legal / Arnold & Smith</h1>
+      <span id="programPill" class="pill jg">Program: JG Wentworth</span>
+    </div>
+    <div class="toolbar" style="margin-top:10px">
+      <label class="muted">State:</label>
+      <select id="state"></select>
+      <span id="timer">12:00</span>
+      <button class="btn" onclick="start()">▶ Start</button>
+      <button class="btn" onclick="pauseT()">❚❚ Pause</button>
+      <button class="btn" onclick="resetT()">⟳ Reset</button>
+      <span class="badge">Hotkeys: 1–6 jump • J=JG • N=NSL • A=A&S</span>
+    </div>
+    <p class="muted" style="margin:8px 0 0">Fee quick-ref: JG ≈ 24–25% via CFT Pay • NSL ≈ 29% via Global Holdings • A&S adds legal monitoring ($24.99/mo).</p>
+  </div>
+
+  <!-- Opening -->
+  <section class="panel" id="s1">
+    <span class="tag">Opening & Control</span>
+    <div class="line"><div class="say">“Hey — this is David over at <b id="brand">JG Wentworth</b>. How’s your day going so far?”</div><div class="copy"><button class="btn" onclick="cp(`Hey — this is David over at ${brandTxt()}. How’s your day going so far?`)">Copy</button></div></div>
+    <div class="line"><div class="say">“Perfect. I’ll be quick — this call’s just to confirm what you qualify for and go over your best relief option. Sound fair?”</div><div class="copy"><button class="btn" onclick="cp('Perfect. I’ll be quick — this call’s just to confirm what you qualify for and go over your best relief option. Sound fair?')">Copy</button></div></div>
+  </section>
+
+  <!-- Discovery -->
+  <section class="panel" id="s2">
+    <span class="tag">Discovery / Qualification</span>
+    <div class="line"><div class="say">“Looks like you’re at about ____ in unsecured credit-card balances, right?”</div><div class="copy"><button class="btn" onclick="cp('Looks like you’re at about ____ in unsecured credit-card balances, right?')">Copy</button></div></div>
+    <div class="line"><div class="say">“Are you current or starting to fall behind on any?”</div><div class="copy"><button class="btn" onclick="cp('Are you current or starting to fall behind on any?')">Copy</button></div></div>
+    <div class="line"><div class="say">“What are you sending in minimums each month — roughly?”</div><div class="copy"><button class="btn" onclick="cp('What are you sending in minimums each month — roughly?')">Copy</button></div></div>
+    <div class="line"><div class="say">“Okay, so you’re paying about ____/mo just to tread water. Let’s see what relief you actually qualify for.”</div><div class="copy"><button class="btn" onclick="cp('Okay, so you’re paying about ____/mo just to tread water. Let’s see what relief you actually qualify for.')">Copy</button></div></div>
+  </section>
+
+  <!-- Path -->
+  <section class="panel" id="s3">
+    <span class="tag">Program Path (by State)</span>
+    <div class="line" id="jgLine"><div class="say"><b>JG:</b> “Great — you qualify under our JG Wentworth relief program. We handle everything from start to finish — no outside law firm needed.”</div><div class="copy"><button class="btn" onclick="cp('Great — you qualify under our JG Wentworth relief program. We handle everything from start to finish — no outside law firm needed.')">Copy</button></div></div>
+    <div class="line" id="nslLine" style="display:none"><div class="say"><b>NSL:</b> “Okay, looks like your state requires a law firm to be involved. That’s no problem — we handle the admin side for them so everything stays simple on your end.”</div><div class="copy"><button class="btn" onclick="cp('Okay, looks like your state requires a law firm to be involved. That’s no problem — we handle the admin side for them so everything stays simple on your end.')">Copy</button></div></div>
+    <div class="line" id="asLine" style="display:none"><div class="say"><b>A&S:</b> “Your state requires a law firm. We work with the firm Arnold & Smith there, and we handle the admin so it stays simple on your end.”</div><div class="copy"><button class="btn" onclick="cp('Your state requires a law firm. We work with the firm Arnold & Smith there, and we handle the admin so it stays simple on your end.')">Copy</button></div></div>
+  </section>
+
+  <!-- Law Firm -->
+  <section class="panel" id="s4" style="display:none">
+    <span class="tag">Law-Firm Script (NSL / A&S)</span>
+    <div class="line"><div class="say">“It’s the same licensed attorneys who work with JG clients — they just operate under the law-firm name New Start Legal <span id="asNote" style="display:none">or Arnold & Smith</span> in your state. Everything’s compliant and backed by the same team.”</div><div class="copy"><button class="btn" onclick="cp('It’s the same licensed attorneys who work with JG clients — they just operate under the law-firm name New Start Legal (or Arnold & Smith) in your state. Everything’s compliant and backed by the same team.')">Copy</button></div></div>
+    <div class="line"><div class="say">“Before we wrap up, I’ll play a quick verification recording. It just confirms what we went over — nothing tricky — and protects you as the client. It takes less than a minute.”</div><div class="copy"><button class="btn" onclick="cp('Before we wrap up, I’ll play a quick verification recording. It just confirms what we went over — nothing tricky — and protects you as the client. It takes less than a minute.')">Copy</button></div></div>
+  </section>
+
+  <!-- Value -->
+  <section class="panel" id="s5">
+    <span class="tag">Value / Vision</span>
+    <div class="line"><div class="say">“Goal is simple — cut your total debt by up to half, end the minimum payments, and get you debt-free in 24–48 months instead of 10+ years.”</div><div class="copy"><button class="btn" onclick="cp('Goal is simple — cut your total debt by up to half, end the minimum payments, and get you debt-free in 24–48 months instead of 10+ years.')">Copy</button></div></div>
+  </section>
+
+  <!-- Close -->
+  <section class="panel" id="s6">
+    <span class="tag">Close / Activation</span>
+    <div class="line"><div class="say">“Next step’s easy — confirm your email and last four for verification and I’ll send the welcome packet. You’ll see your first draft offer right after the call.”</div><div class="copy"><button class="btn" onclick="cp('Next step’s easy — confirm your email and last four for verification and I’ll send the welcome packet. You’ll see your first draft offer right after the call.')">Copy</button></div></div>
+  </section>
+
+  <!-- Rebuttals -->
+  <section class="panel">
+    <span class="tag">Rebuttals (Quick Copy)</span>
+    <details open>
+      <summary>I need to think about it.</summary>
+      <div class="line"><div class="say">“Totally fair. When people say ‘think about it,’ it’s usually 1 of 3 things — cost, trust, or timing. Which one is it for you so I can get you the right info?”</div><div class="copy"><button class="btn" onclick="cp(`Totally fair. When people say 'think about it,' it’s usually 1 of 3 things — cost, trust, or timing. Which one is it for you so I can get you the right info?`)">Copy</button></div></div>
+      <div class="line"><div class="say">“If we leave it as-is, the balances keep compounding. What would waiting 30–60 days change for you besides more interest?”</div><div class="copy"><button class="btn" onclick="cp('If we leave it as-is, the balances keep compounding. What would waiting 30–60 days change for you besides more interest?')">Copy</button></div></div>
+      <div class="line"><div class="say">“Why don’t we lock the file and the negotiators start work — if anything doesn’t look right after the verification, we’ll adjust. Fair?”</div><div class="copy"><button class="btn" onclick="cp('Why don’t we lock the file and the negotiators start work — if anything doesn’t look right after the verification, we’ll adjust. Fair?')">Copy</button></div></div>
+    </details>
+    <details>
+      <summary>I need to talk to my spouse.</summary>
+      <div class="line"><div class="say">“Absolutely — quick question: what do you think they’ll be most concerned about — the payment or the process?”</div><div class="copy"><button class="btn" onclick="cp('Absolutely — quick question: what do you think they’ll be most concerned about — the payment or the process?')">Copy</button></div></div>
+      <div class="line"><div class="say">“Let’s do this: we’ll set everything up, and I’ll send the welcome email with the exact numbers so you can review together tonight. If either of you isn’t comfortable, we pause — sound fair?”</div><div class="copy"><button class="btn" onclick="cp('Let’s do this: we’ll set everything up, and I’ll send the welcome email with the exact numbers so you can review together tonight. If either of you isn’t comfortable, we pause — sound fair?')">Copy</button></div></div>
+    </details>
+    <details>
+      <summary>Is this legit? / Law firm worries.</summary>
+      <div class="line"><div class="say">“It’s the same licensed attorneys who work with JG clients — the law-firm name is just how they’re registered in your state. Our side handles admin; the firm handles the legal.”</div><div class="copy"><button class="btn" onclick="cp('It’s the same licensed attorneys who work with JG clients — the law-firm name is just how they’re registered in your state. Our side handles admin; the firm handles the legal.')">Copy</button></div></div>
+      <div class="line"><div class="say">“Before the recording, I’ll explain every line so there are no surprises. It’s short and protects you as the client.”</div><div class="copy"><button class="btn" onclick="cp('Before the recording, I’ll explain every line so there are no surprises. It’s short and protects you as the client.')">Copy</button></div></div>
+    </details>
+    <details>
+      <summary>I can’t afford anything right now.</summary>
+      <div class="line"><div class="say">“I hear you. If we do nothing, you keep sending minimums of about $___/mo and the balances grow. If we set this up, your draft would target $___/mo — which side helps you breathe?”</div><div class="copy"><button class="btn" onclick="cp('I hear you. If we do nothing, you keep sending minimums of about $___/mo and the balances grow. If we set this up, your draft would target $___/mo — which side helps you breathe?')">Copy</button></div></div>
+      <div class="line"><div class="say">“Let’s lock the file today while it’s in review, and if the draft is off, we adjust before it goes live. Fair?”</div><div class="copy"><button class="btn" onclick="cp('Let’s lock the file today while it’s in review, and if the draft is off, we adjust before it goes live. Fair?')">Copy</button></div></div>
+    </details>
+    <details>
+      <summary>I don’t want my credit pulled.</summary>
+      <div class="line"><div class="say">“Totally. The soft pull confirms balances and prevents errors — it doesn’t impact your score. Without it, we’d be guessing and that can hurt you later.”</div><div class="copy"><button class="btn" onclick="cp('Totally. The soft pull confirms balances and prevents errors — it doesn’t impact your score. Without it, we’d be guessing and that can hurt you later.')">Copy</button></div></div>
+    </details>
+  </section>
+</div>
+
+<script>
+/* -------- Official mapping (from your workbook) -------- */
+const MAP = {
+  "West Virginia":"AS", // Arnold & Smith
+  // New Start Legal
+  "Connecticut":"NSL","Delaware":"NSL","Georgia":"NSL","Hawaii":"NSL","Illinois":"NSL",
+  "Kansas":"NSL","Maine":"NSL","Minnesota":"NSL","New Hampshire":"NSL","New Jersey":"NSL",
+  "North Dakota":"NSL","Ohio":"NSL","Oregon":"NSL","Rhode Island":"NSL","South Carolina":"NSL",
+  "Vermont":"NSL","Washington":"NSL","Wisconsin":"NSL","Wyoming":"NSL","District of Columbia":"NSL"
+};
+const ALL = [...new Set([...Object.keys(MAP),
+ 'Alabama','Alaska','Arizona','Arkansas','California','Colorado','Florida','Idaho','Indiana','Iowa',
+ 'Kentucky','Louisiana','Maryland','Massachusetts','Michigan','Mississippi','Missouri','Montana',
+ 'Nebraska','Nevada','New Mexico','New York','North Carolina','Oklahoma','Pennsylvania','South Dakota',
+ 'Tennessee','Texas','Utah','Virginia'])].sort((a,b)=>a.localeCompare(b));
+
+/* DOM helpers */
+const q=s=>document.querySelector(s);
+function cp(t){navigator.clipboard.writeText(t)}
+function brandTxt(){return q('#brand').innerText}
+
+/* Build state list */
+(function(){
+  const s=q('#state'); ALL.forEach(st=>{const o=document.createElement('option');o.value=st;o.textContent=st;s.append(o);});
+  s.value='Florida'; onState(s.value);
+})();
+
+/* Program switching */
+let prog='JG';
+function setProg(p){
+  prog=p;
+  q('#s4').style.display = (p==='JG')?'none':'block';
+  q('#jgLine').style.display = (p==='JG')?'flex':'none';
+  q('#nslLine').style.display = (p==='NSL')?'flex':'none';
+  q('#asLine').style.display  = (p==='AS') ?'flex':'none';
+  q('#asNote').style.display  = (p==='AS') ?'inline':'none';
+  q('#brand').innerText = p==='JG'?'JG Wentworth':p==='NSL'?'New Start Legal':'Arnold & Smith';
+  const pill=q('#programPill'); 
+  pill.textContent='Program: '+(p==='JG'?'JG Wentworth':p==='NSL'?'New Start Legal':'Arnold & Smith');
+  pill.className='pill '+(p==='JG'?'jg':p==='NSL'?'nsl':'as');
+}
+
+/* Auto set by state */
+function onState(state){
+  const mapped = MAP[state] || 'JG';
+  setProg(mapped);
+}
+
+/* Timer */
+let tInt=null, remain=12*60;
+function fmt(s){const m=String(Math.floor(s/60)).padStart(2,'0');const ss=String(s%60).padStart(2,'0');return m+':'+ss}
+function draw(){q('#timer').textContent=fmt(remain)}
+function start(){ if(tInt) return; tInt=setInterval(()=>{ remain=Math.max(0,remain-1); draw(); if(remain===0){ pauseT(); } },1000) }
+function pauseT(){ if(tInt){ clearInterval(tInt); tInt=null; } }
+function resetT(){ remain=12*60; draw(); }
+draw();
+
+/* Hotkeys */
+document.addEventListener('keydown',e=>{
+  if(e.target.matches('input,textarea,select')) return;
+  const map=['#s1','#s2','#s3','#s4','#s5','#s6'];
+  if(['1','2','3','4','5','6'].includes(e.key)){ const el=q(map[+e.key-1]); if(el){ el.scrollIntoView({behavior:'smooth'});} }
+  if(e.key.toLowerCase()==='j') setProg('JG');
+  if(e.key.toLowerCase()==='n') setProg('NSL');
+  if(e.key.toLowerCase()==='a') setProg('AS');
+});
+</script>
+</body>
+</html>
