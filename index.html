@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ClosenStein — Live v3.1 (Manual Deposit)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root{
+    --jg-green:#0bb852;
+    --jg-deep:#0a7a3a;
+    --jg-light:#f3fff7;
+    --border-strong:#089143;
+    --card:#ffffff;
+    --line:#dbe7df;
+    --text:#0f2416;
+    --muted:#6a7a6f;
+    --warning:#ffb100;
+  }
+  *{box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  body{margin:0;background:#f5faf7;color:var(--text)}
+  header{
+    display:flex;align-items:center;gap:12px;
+    padding:10px 18px;border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:20;background:#fff;
+  }
+  .logo{
+    width:34px;height:34px;border-radius:11px;
+    background:radial-gradient(circle at 30% 20%,#d5ffe6,var(--jg-deep));
+    display:grid;place-items:center;color:#fff;font-weight:900;font-size:16px;
+  }
+  .logo span{font-size:13px;letter-spacing:.03em;}
+  h1{margin:0;font-size:18px;}
+  .sub{font-size:12px;color:var(--muted);}
+  nav{margin-left:auto;display:flex;flex-wrap:wrap;gap:6px}
+  nav button{
+    border:none;border-radius:999px;padding:6px 10px;
+    font-size:11px;cursor:pointer;background:#e9f6ee;color:#0c4c26;
+  }
+  nav button:hover{background:#d3efdd;}
+  .wrap{max-width:1120px;margin:18px auto 40px;padding:0 12px 40px;}
+  .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+  .tag{
+    font-size:11px;border-radius:999px;border:1px solid var(--line);
+    padding:5px 10px;background:#fff;color:var(--muted);
+  }
+  .tag.green{background:#e7ffef;color:var(--jg-deep);border-color:#c8efd5;font-weight:600;}
+  .tag.warn{background:#fff6df;color:#7a5200;border-color:#f1da9b;}
+  .card{
+    background:var(--card);border-radius:14px;border:1px solid var(--line);
+    padding:14px 14px 16px;margin-bottom:14px;
+    box-shadow:0 8px 18px rgba(0,0,0,.03);
+  }
+  .card.hi{
+    border:2px solid var(--border-strong);
+    background:linear-gradient(to bottom,#eafff4,#ffffff);
+  }
+  h2{margin:0 0 8px;font-size:16px;}
+  h3{margin:8px 0;font-size:14px;}
+  label{font-size:12px;font-weight:600;display:block;margin:6px 0 2px;}
+  input[type="text"],
+  input[type="number"],
+  select, textarea{
+    width:100%;padding:8px 10px;font-size:13px;
+    border-radius:10px;border:1px solid #d5e4da;
+    background:#fff;resize:vertical;
+  }
+  textarea{min-height:70px;}
+  .row{display:flex;flex-wrap:wrap;gap:10px;}
+  .col{flex:1 1 220px;}
+  .check-line{
+    display:flex;align-items:flex-start;gap:6px;font-size:12px;margin:4px 0;
+  }
+  .check-line input{margin-top:3px;}
+  .script-box{
+    border-radius:10px;border:2px solid var(--border-strong);
+    background:#e7ffef;padding:10px 12px;font-size:13px;line-height:1.45;
+  }
+  .script-box strong{color:#084321;}
+  .section-title{
+    font-size:12px;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--muted);margin-bottom:4px;
+  }
+  .note{font-size:11px;color:var(--muted);margin-top:2px;}
+  .quote-stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;}
+  .stat{
+    flex:1 1 140px;border-radius:12px;border:1px solid var(--line);
+    padding:8px 10px;background:#fbfdfc;font-size:11px;
+  }
+  .stat strong{display:block;font-size:14px;margin-top:2px;}
+  .btn{
+    border:none;border-radius:11px;
+    background:var(--jg-green);color:#fff;
+    padding:8px 14px;font-size:13px;font-weight:600;
+    cursor:pointer;box-shadow:0 8px 16px rgba(14,130,65,.25);
+  }
+  .btn.secondary{
+    background:#e9f6ee;color:#0f4b26;box-shadow:none;
+    border:1px solid #cfe7d7;
+  }
+  .btn.small{padding:5px 9px;font-size:11px;}
+  .btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center;}
+  .msg{font-size:11px;color:var(--muted);}
+  .fl-callout{
+    border-radius:12px;border:2px dashed #f1c15b;
+    background:#fff9e6;padding:10px 12px;font-size:12px;
+  }
+  blockquote{
+    margin:8px 0 0;border-left:3px solid #f1c15b;
+    padding-left:10px;font-size:13px;line-height:1.5;
+  }
+  @media(max-width:640px){
+    header{flex-wrap:wrap;align-items:flex-start;}
+    nav{width:100%;margin-left:0;margin-top:6px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>JG</span></div>
+  <div>
+    <h1>ClosenStein — Live v3.1 (Manual Deposit)</h1>
+    <div class="sub">Loan-bait intro • Credit reality • Fast quote with manual deposit • FL TP reminder</div>
+  </div>
+  <nav>
+    <button onclick="scrollToId('introBlock')">Intro</button>
+    <button onclick="scrollToId('creditBlock')">Credit Reality</button>
+    <button onclick="scrollToId('budgetBlock')">Budget + Quote</button>
+    <button onclick="scrollToId('flBlock')">FL Notice</button>
+    <button onclick="scrollToId('bankBlock')">Banking</button>
+    <button onclick="scrollToId('agreeBlock')">Agreement</button>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <div class="pill-row">
+    <span class="tag green">One-page flow</span>
+    <span class="tag">Manual deposit control</span>
+    <span class="tag warn">Florida: read TP notice before sending agreement</span>
+  </div>
+
+  <!-- 1) INTRO + VERIFY + TP REMINDER -->
+  <section id="introBlock" class="card hi">
+    <div class="section-title">Step 1 • Intro → Verify / Consent</div>
+    <h2>Loan-bait opener (Pattern Disrupt)</h2>
+
+    <div class="script-box">
+      <p><strong>Main opener</strong><br>
+      “Hey — it’s David from JG Wentworth on a recorded line. Looks like you may have been looking for a loan — is that what you’re looking for?”</p>
+
+      <p><strong>If Yes →</strong><br>
+      “Great — we do a lot here, so let’s see what we can do for you… sound fair?”</p>
+
+      <p><strong>If No →</strong><br>
+      “Got it — what were you looking for?” (Let them talk.)<br>
+      “Well, let’s see if I can help… sound fair?”</p>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <div class="col">
+        <label for="stateSel">Client State</label>
+        <select id="stateSel">
+          <option>Florida</option>
+          <option>Alabama</option>
+          <option>Alaska</option>
+          <option>Arizona</option>
+          <option>Arkansas</option>
+          <option>California</option>
+          <option>Colorado</option>
+          <option>Connecticut</option>
+          <option>Delaware</option>
+          <option>Georgia</option>
+          <option>Hawaii</option>
+          <option>Idaho</option>
+          <option>Illinois</option>
+          <option>Indiana</option>
+          <option>Iowa</option>
+          <option>Kansas</option>
+          <option>Kentucky</option>
+          <option>Louisiana</option>
+          <option>Maine</option>
+          <option>Maryland</option>
+          <option>Massachusetts</option>
+          <option>Michigan</option>
+          <option>Minnesota</option>
+          <option>Mississippi</option>
+          <option>Missouri</option>
+          <option>Montana</option>
+          <option>Nebraska</option>
+          <option>Nevada</option>
+          <option>New Hampshire</option>
+          <option>New Jersey</option>
+          <option>New Mexico</option>
+          <option>New York</option>
+          <option>North Carolina</option>
+          <option>North Dakota</option>
+          <option>Ohio</option>
+          <option>Oklahoma</option>
+          <option>Oregon</option>
+          <option>Pennsylvania</option>
+          <option>Rhode Island</option>
+          <option>South Carolina</option>
+          <option>South Dakota</option>
+          <option>Tennessee</option>
+          <option>Texas</option>
+          <option>Utah</option>
+          <option>Vermont</option>
+          <option>Virginia</option>
+          <option>Washington</option>
+          <option>West Virginia</option>
+          <option>Wisconsin</option>
+          <option>Wyoming</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="tpNum">FL TP# (if Florida)</label>
+        <input id="tpNum" type="text" value="TP 108499" />
+        <div class="note">Leave as-is unless manager gives you a different TP to reference.</div>
+      </div>
+      <div class="col">
+        <label>State Notes</label>
+        <div id="stateNotes" class="note">
+          Model: Standard (Non-Attorney) • Default fee 25% • FL: read required language aloud before any signature • License TP 108499
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:10px;background:#fffdf7;border-color:#ffe6a8;">
+      <h3 style="margin-top:0;font-size:13px;">Verify / Consent checklist</h3>
+      <div class="check-line">
+        <input type="checkbox" id="chkRecorded" />
+        <label for="chkRecorded">Recorded line disclosed.</label>
+      </div>
+      <div class="check-line">
+        <input type="checkbox" id="chkConsent" />
+        <label for="chkConsent">
+          Consent read + identity verified (Name • Address • DOB • Last 4 of SSN). “Do I have your consent for a <strong>soft credit inquiry</strong> to see what you qualify for? It won’t affect your score.”
+        </label>
+      </div>
+      <div class="check-line">
+        <input type="checkbox" id="chkFLTP" />
+        <label for="chkFLTP">
+          <strong>(FL only)</strong> I have personally read the required Florida TP language aloud <strong>before</strong> sending any contract.
+        </label>
+      </div>
+      <div class="note">Tip: check these off as you go so you don’t miss anything under pressure.</div>
+    </div>
+  </section>
+
+  <!-- 2) CREDIT REALITY -->
+  <section id="creditBlock" class="card">
+    <div class="section-title">Step 2 • Credit Reality (after soft pull)</div>
+    <h2>Credit Reality — dynamic line</h2>
+
+    <div class="row">
+      <div class="col">
+        <label for="crDebt">Total Enrolled Debt ($)</label>
+        <input id="crDebt" type="number" min="0" step="100" placeholder="e.g., 42568" oninput="updateCreditScript()" />
+      </div>
+      <div class="col">
+        <label for="crPay">Minimum Monthly Payments ($)</label>
+        <input id="crPay" type="number" min="0" step="10" placeholder="e.g., 1897" oninput="updateCreditScript();syncBudgetFromCredit()" />
+      </div>
+      <div class="col">
+        <label for="crUtil">Utilization (%)</label>
+        <input id="crUtil" type="number" min="0" max="300" step="1" placeholder="e.g., 202" oninput="updateCreditScript()" />
+      </div>
+    </div>
+
+    <label style="margin-top:10px;">Live Script</label>
+    <div id="creditScript" class="script-box">
+      “Yeah… I see why we’re talking today. You’ve got about $__ paying minimum $__ a month and wow your utilization is maxed at __%. Looks like here you are paying a lot every month and score keeps dropping. (awkward pause) How long can you keep that up before it implodes?”
+    </div>
+    <div class="note">Numbers above auto-drop into this line once you type them in.</div>
+  </section>
+
+  <!-- 3) BUDGET + QUOTE (MANUAL DEPOSIT) -->
+  <section id="budgetBlock" class="card">
+    <div class="section-title">Step 3 • Budget → Manual Quote</div>
+    <h2>Budget + Quick Quote (Manual Deposit)</h2>
+
+    <div class="row">
+      <div class="col">
+        <label for="bCurPay">Current Monthly Payment ($)</label>
+        <input id="bCurPay" type="number" min="0" step="10" placeholder="e.g., 1897" />
+        <div class="btn-row" style="margin-top:4px;">
+          <button class="btn small secondary" type="button" onclick="syncBudgetFromCredit()">Copy from Credit Reality</button>
+        </div>
+      </div>
+      <div class="col">
+        <label for="bNewDep">New Monthly Deposit ($)</label>
+        <input id="bNewDep" type="number" min="0" step="10" placeholder="Manual — you control this" oninput="updateQuoteStats()" />
+      </div>
+      <div class="col">
+        <label for="bMonths">Program Length (months)</label>
+        <input id="bMonths" type="number" min="6" step="1" value="36" oninput="updateQuoteStats()" />
+      </div>
+    </div>
+
+    <div class="quote-stats">
+      <div class="stat">
+        Monthly Savings
+        <strong id="statMonthlySave">—</strong>
+        <span class="note">Current monthly − new deposit</span>
+      </div>
+      <div class="stat">
+        Total Deposits (program)
+        <strong id="statTotalDep">—</strong>
+        <span class="note">New deposit × months</span>
+      </div>
+      <div class="stat">
+        Total Savings vs staying the same
+        <strong id="statTotalSave">—</strong>
+        <span class="note">(Monthly savings × months) — just a simple “wow” number.</span>
+      </div>
+    </div>
+
+    <label style="margin-top:10px;">Quote Script</label>
+    <div id="quoteScript" class="script-box">
+      “Great news — I can get you on about __ months with a monthly deposit of $__.
+      That would save you about $__ every month — and roughly $__ over the life of the program compared to what you’re paying now.
+      My question is, can you manage just $__ a month to finally get out of this debt and start building that Savings Score?”
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" type="button" onclick="copyQuote()">Copy Quick Quote</button>
+      <span id="quoteMsg" class="msg"></span>
+    </div>
+  </section>
+
+  <!-- 4) FL NOTICE -->
+  <section id="flBlock" class="card">
+    <div class="section-title">Step 4 • Florida TP Notice (Compliance)</div>
+    <h2>Florida Compliance Notice — Must Be Read Aloud <em>Before</em> Sending Agreement</h2>
+
+    <div class="fl-callout">
+      <strong>Florida reminder:</strong> If the client state above is <strong>Florida</strong>, you <u>must</u> read the following TP language aloud
+      <strong>before</strong> you send any agreement, then confirm the FL checkbox in Step&nbsp;1.
+      <blockquote>
+        “You may give notice of cancellation to us in writing within <strong>7 business days</strong> after receipt of the confirmation.
+        Furthermore, JG Wentworth’s policy allows you to cancel at any time and any <strong>unearned funds</strong> will be returned to you from your dedicated account.
+        The license number issued by the Florida Department of Agriculture and Consumer Services for both the commercial telephone seller is
+        <strong>TC 5615</strong> and the salesperson is <strong>TP 108499</strong>. Our address is <strong>1200 Morris Drive, Chesterbrook, PA 19087</strong>.”
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- 5) BANKING / ACH -->
+  <section id="bankBlock" class="card">
+    <div class="section-title">Step 5 • Banking / ACH</div>
+    <h2>Banking / ACH Checklist</h2>
+
+    <div class="check-line">
+      <input type="checkbox" id="ach1" />
+      <label for="ach1">Routing number captured and repeated back.</label>
+    </div>
+    <div class="check-line">
+      <input type="checkbox" id="ach2" />
+      <label for="ach2">Account number captured and repeated back.</label>
+    </div>
+    <div class="check-line">
+      <input type="checkbox" id="ach3" />
+      <label for="ach3">First deposit date set 7–14 days out.</label>
+    </div>
+    <div class="check-line">
+      <input type="checkbox" id="ach4" />
+      <label for="ach4">Ongoing drafts matched to client pay frequency (weekly, bi-weekly, semi-monthly, or monthly).</label>
+    </div>
+  </section>
+
+  <!-- 6) AGREEMENT / CLOSE -->
+  <section id="agreeBlock" class="card">
+    <div class="section-title">Step 6 • Agreement & Close</div>
+    <h2>Agreement / Close Script</h2>
+
+    <div class="script-box">
+      <p>“Alright, based on your balances and budget, you’re approved to move forward. I’m going to email your agreement so we can review it together — it only takes a few minutes. Once you confirm everything looks good, we’ll lock in your welcome call and your first deposit date.”</p>
+
+      <p><strong>FL double-check:</strong> If the client is in Florida, confirm you have already read the full TP language <em>before</em> sending the agreement.</p>
+    </div>
+
+    <div class="check-line" style="margin-top:8px;">
+      <input type="checkbox" id="ag1" />
+      <label for="ag1">Agreement sent, walked through, and signature confirmed.</label>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const nf = new Intl.NumberFormat("en-US", {style:"currency",currency:"USD",maximumFractionDigits:0});
+
+  function scrollToId(id){
+    const el = document.getElementById(id);
+    if(el){ el.scrollIntoView({behavior:"smooth",block:"start"}); }
+  }
+
+  function updateStateNotes(){
+    const state = document.getElementById("stateSel").value;
+    const tp = document.getElementById("tpNum").value || "TP 108499";
+    const notes = document.getElementById("stateNotes");
+    if(state === "Florida"){
+      notes.textContent =
+        "Model: Standard (Non-Attorney) • Default fee 25% • FL: read required TP language aloud before any signature • License " + tp;
+    } else {
+      notes.textContent =
+        "Standard (Non-Attorney) model • Typical fee 25% • Say “deposit”, not “payment”.";
+    }
+  }
+
+  document.getElementById("stateSel").addEventListener("change", updateStateNotes);
+  document.getElementById("tpNum").addEventListener("input", updateStateNotes);
+
+  function updateCreditScript(){
+    const debt = +document.getElementById("crDebt").value || 0;
+    const pay  = +document.getElementById("crPay").value || 0;
+    const util = document.getElementById("crUtil").value;
+    const dTxt = debt ? nf.format(debt) : "$__";
+    const pTxt = pay  ? nf.format(pay)  : "$__";
+    const uTxt = util !== "" ? util : "__";
+    const box = document.getElementById("creditScript");
+    box.textContent =
+      "“Yeah… I see why we’re talking today. You’ve got about " + dTxt +
+      " paying minimum " + pTxt +
+      " a month and wow your utilization is maxed at " + uTxt +
+      "%. Looks like here you are paying a lot every month and score keeps dropping. (awkward pause) How long can you keep that up before it implodes?”";
+  }
+
+  function syncBudgetFromCredit(){
+    const src = document.getElementById("crPay").value;
+    if(src){
+      document.getElementById("bCurPay").value = src;
+      updateQuoteStats();
+    }
+  }
+
+  function updateQuoteStats(){
+    const cur = +document.getElementById("bCurPay").value || 0;
+    const dep = +document.getElementById("bNewDep").value || 0;
+    const mos = +document.getElementById("bMonths").value || 0;
+
+    const mSave = Math.max(0, cur - dep);
+    const totalDep = dep * mos;
+    const totalSave = mSave * mos;
+
+    document.getElementById("statMonthlySave").textContent = mSave ? nf.format(mSave) : "—";
+    document.getElementById("statTotalDep").textContent   = totalDep ? nf.format(totalDep) : "—";
+    document.getElementById("statTotalSave").textContent  = totalSave ? nf.format(totalSave) : "—";
+
+    const qBox = document.getElementById("quoteScript");
+    const curTxt   = cur ? nf.format(cur)   : "$__";
+    const depTxt   = dep ? nf.format(dep)   : "$__";
+    const mSaveTxt = mSave ? nf.format(mSave) : "$__";
+    const tSaveTxt = totalSave ? nf.format(totalSave) : "$__";
+
+    const monthsTxt = mos || "__";
+
+    qBox.textContent =
+      "“Great news — I can get you on about " + monthsTxt +
+      " months with a monthly deposit of " + depTxt +
+      ". That would save you about " + mSaveTxt +
+      " every month — and roughly " + tSaveTxt +
+      " over the life of the program compared to what you’re paying now. " +
+      "My question is, can you manage just " + depTxt +
+      " a month to finally get out of this debt and start building that Savings Score?”";
+  }
+
+  function copyQuote(){
+    const text = document.getElementById("quoteScript").textContent;
+    const msg = document.getElementById("quoteMsg");
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(()=>{
+        msg.textContent = "Quote copied ✓";
+        setTimeout(()=>msg.textContent="",1600);
+      }).catch(()=>{
+        msg.textContent = "Copy failed — highlight and Ctrl+C.";
+      });
+    } else {
+      msg.textContent = "Copy not supported — highlight text and Ctrl+C.";
+    }
+  }
+
+  // initial
+  updateStateNotes();
+  updateCreditScript();
+  updateQuoteStats();
+</script>
+
+</body>
+</html>
