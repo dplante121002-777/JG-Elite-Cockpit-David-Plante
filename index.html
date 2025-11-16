@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ClosenStein v7 — NEPQ ADHD + State-Smart + Post-Quote</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --jg-green:#0bb852;
+      --jg-deep:#0a7a3a;
+      --bg:#f5fbf7;
+      --card:#ffffff;
+      --line:#dbe8df;
+      --text:#102316;
+      --muted:#6c7a71;
+      --warn:#ffb100;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    header{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 14px;
+      border-bottom:1px solid var(--line);
+      background:#fff;
+      position:sticky;
+      top:0;
+      z-index:20;
+    }
+    .logo{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      background:linear-gradient(135deg,var(--jg-green),var(--jg-deep));
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-weight:900;
+    }
+    h1{
+      margin:0;
+      font-size:18px;
+    }
+    .sub{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .container{
+      max-width:980px;
+      margin:14px auto 40px;
+      padding:0 12px 16px;
+    }
+    .tabs{
+      display:flex;
+      gap:6px;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .tab-btn{
+      border-radius:999px;
+      border:1px solid var(--line);
+      padding:6px 12px;
+      font-size:13px;
+      cursor:pointer;
+      background:#f3faf6;
+      color:var(--muted);
+    }
+    .tab-btn.active{
+      background:var(--jg-deep);
+      color:#fff;
+      border-color:var(--jg-deep);
+      font-weight:700;
+    }
+    .card{
+      background:var(--card);
+      border-radius:14px;
+      border:1px solid var(--line);
+      padding:12px 14px;
+      margin-bottom:10px;
+      box-shadow:0 6px 14px rgba(0,0,0,.04);
+    }
+    h2{
+      margin:0 0 6px;
+      font-size:16px;
+    }
+    h3{
+      margin:10px 0 6px;
+      font-size:14px;
+    }
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+    }
+    .quick-btn-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:8px;
+    }
+    .quick-btn{
+      flex:1 1 120px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      padding:8px 10px;
+      font-size:12px;
+      cursor:pointer;
+      background:#e9f8ef;
+      color:#0a5230;
+      font-weight:600;
+      text-align:center;
+    }
+    .quick-btn.secondary{
+      background:#f4f6fb;
+      color:#23304f;
+    }
+    .script-box{
+      border-radius:10px;
+      border:1px dashed var(--line);
+      background:#fafdfb;
+      padding:10px 12px;
+      font-size:13px;
+      white-space:pre-wrap;
+    }
+    .quote-highlight{
+      border-radius:10px;
+      border:2px solid var(--warn);
+      background:#fff9e6;
+      padding:8px 10px;
+      font-size:13px;
+      white-space:pre-wrap;
+    }
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .col{
+      flex:1 1 220px;
+    }
+    label{
+      font-size:13px;
+      font-weight:600;
+      display:block;
+      margin-bottom:4px;
+    }
+    input, select{
+      width:100%;
+      padding:8px 10px;
+      border-radius:8px;
+      border:1px solid #ccd8cf;
+      font-size:14px;
+      font-family:inherit;
+    }
+    .kpi-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:6px;
+    }
+    .kpi{
+      flex:1 1 160px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:#fff;
+      padding:8px 10px;
+      font-size:12px;
+    }
+    .kpi strong{
+      display:block;
+      font-size:14px;
+      margin-bottom:2px;
+    }
+    .badge{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:999px;
+      font-size:11px;
+      border:1px solid var(--line);
+      background:#f5faf7;
+      margin-right:4px;
+      margin-bottom:3px;
+    }
+    .badge.green{
+      background:#e8fbf0;
+      border-color:#c6e8d0;
+      color:#0a7a3a;
+      font-weight:700;
+    }
+    .fl-warning{
+      margin-top:8px;
+      border-radius:10px;
+      border:2px solid var(--warn);
+      background:#fff7da;
+      padding:8px 10px;
+      font-size:12px;
+      display:none;
+      white-space:pre-wrap;
+    }
+    .checklist{
+      list-style:none;
+      padding-left:0;
+      margin:6px 0 0;
+    }
+    .checklist li{
+      display:flex;
+      align-items:flex-start;
+      gap:6px;
+      margin-bottom:4px;
+      font-size:13px;
+    }
+    .checklist input[type="checkbox"]{
+      margin-top:2px;
+    }
+    .tab-content{display:none;}
+    .tab-content.active{display:block;}
+    @media (max-width:640px){
+      .container{padding:0 8px 16px;}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">JG</div>
+  <div>
+    <h1>ClosenStein v7 — NEPQ ADHD + State-Smart + Post-Quote</h1>
+    <div class="sub">Quick NEPQ • Credit • Budget • Banking/State • Post-Quote • State Scripts</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="quickTab">Quick NEPQ</button>
+    <button class="tab-btn" data-tab="creditTab">Credit</button>
+    <button class="tab-btn" data-tab="budgetTab">Budget</button>
+    <button class="tab-btn" data-tab="bankTab">Banking/State</button>
+    <button class="tab-btn" data-tab="postQuoteTab">Post-Quote</button>
+    <button class="tab-btn" data-tab="stateTab">State Scripts</button>
+  </div>
+  <!-- QUICK TAB -->
+  <div id="quickTab" class="tab-content active">
+    <div class="card">
+      <h2>NEPQ Quick Flow – One Box Only</h2>
+      <p class="hint">Tap a button and just read what you see.</p>
+
+      <h3>Core Flow</h3>
+      <div class="quick-btn-row">
+        <button class="quick-btn" data-q="open">OPEN</button>
+        <button class="quick-btn" data-q="impact">IMPACT Qs</button>
+        <button class="quick-btn" data-q="consequence">CONSEQUENCE Qs</button>
+        <button class="quick-btn" data-q="close">CLOSE</button>
+      </div>
+
+      <div class="script-box" id="quickScript">
+Tap OPEN, IMPACT, CONSEQUENCE, or CLOSE above to load your NEPQ lines here.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Top 5 Objections – Simple Helper</h2>
+      <p class="hint">Tap what they say. Read the yellow box.</p>
+      <div class="quick-btn-row">
+        <button class="quick-btn secondary" data-obj="loan">Loan</button>
+        <button class="quick-btn secondary" data-obj="think">Think About It</button>
+        <button class="quick-btn secondary" data-obj="spouse">Spouse</button>
+        <button class="quick-btn secondary" data-obj="free">Free Money Check</button>
+        <button class="quick-btn secondary" data-obj="credit">Credit / Score</button>
+      </div>
+      <div class="quote-highlight" id="closeHelper">
+Close Helper will show here. Pick the objection button that matches what they say.
+      </div>
+    </div>
+  </div>
+
+  <!-- CREDIT TAB -->
+  <div id="creditTab" class="tab-content">
+    <div class="card">
+      <h2>Credit Reality</h2>
+      <p class="hint">Type what you see on the soft pull. Read the script.</p>
+      <div class="row">
+        <div class="col">
+          <label for="enrolledDebt">Total Debt ($)</label>
+          <input id="enrolledDebt" type="number" min="0" step="100" />
+        </div>
+        <div class="col">
+          <label for="minPayment">Min Payments ($/mo)</label>
+          <input id="minPayment" type="number" min="0" step="10" />
+        </div>
+        <div class="col">
+          <label for="utilPct">Utilization (%)</label>
+          <input id="utilPct" type="number" min="0" max="300" step="1" />
+        </div>
+      </div>
+      <h3>Script</h3>
+      <div class="script-box" id="creditScript">
+“From what I’m seeing here, you’ve got about $____ in total balances, with minimum payments around $____ a month, and your utilization is sitting at about ___%.
+
+That probably explains why it feels so tight every month.
+
+How is all of that affecting you right now?”
+      </div>
+    </div>
+  </div>
+
+  <!-- BUDGET TAB -->
+  <div id="budgetTab" class="tab-content">
+    <div class="card">
+      <h2>Budget + Quote</h2>
+      <p class="hint">1) What they pay now. 2) What we recommend. 3) Read the quote.</p>
+      <div class="row">
+        <div class="col">
+          <label for="curPayment">Current Total Monthly ($)</label>
+          <input id="curPayment" type="number" min="0" step="10" />
+        </div>
+        <div class="col">
+          <label for="newDeposit">New Deposit ($)</label>
+          <input id="newDeposit" type="number" min="0" step="10" />
+        </div>
+        <div class="col">
+          <label for="progMonths">Program Length (months)</label>
+          <input id="progMonths" type="number" min="6" step="1" />
+        </div>
+      </div>
+
+      <div class="kpi-row">
+        <div class="kpi">
+          <strong>Monthly Savings</strong>
+          <div id="monthlySavings">$0</div>
+          <div class="hint">Current − New</div>
+        </div>
+        <div class="kpi">
+          <strong>Total Savings</strong>
+          <div id="totalSavings">$0</div>
+          <div class="hint">Monthly savings × months</div>
+        </div>
+      </div>
+
+      <h3>Quote Script</h3>
+      <div class="quote-highlight" id="quoteScript">
+“Based on your balances and your cash flow, instead of taking on another loan,
+we can structure this at about ___ months with a monthly deposit of $___.
+
+That would lower what you’re sending out by about $___ each month and save roughly $___ over the life of the program compared to the path you’re on now.
+
+How would that feel compared to what you’re doing today?
+
+Is that deposit something you could realistically handle so this actually works for you long term?”
+      </div>
+    </div>
+  </div>
+
+  <!-- BANK TAB -->
+  <div id="bankTab" class="tab-content">
+    <div class="card">
+      <h2>Banking + State Model</h2>
+      <p class="hint">Pick state, then grab banking and draft date. Read the script box for what to say.</p>
+      <div class="row">
+        <div class="col">
+          <label for="stateSel">Client State</label>
+          <select id="stateSel"></select>
+        </div>
+        <div class="col">
+          <label>Snapshot</label>
+          <div class="badge green" id="modelBadge">Model: —</div>
+          <div class="badge" id="feeBadge">Fee: —</div>
+          <div class="badge" id="dedBadge">Dedicated: —</div>
+        </div>
+      </div>
+
+      <h3>Recording Notes</h3>
+      <div class="script-box" id="recordingText">
+Select a state to see if it’s NSL, Arnold &amp; Smith, or Standard, and which recording to play.
+      </div>
+
+      <h3>What to SAY (Live State Script)</h3>
+      <div class="quote-highlight" id="liveStateScript">
+Your live state-specific script will appear here. Pick a state above and read this out loud.
+      </div>
+
+      <div class="fl-warning" id="flWarning">
+<strong>FLORIDA ONLY — READ THIS BEFORE SENDING AGREEMENT</strong>
+“You may give notice of cancellation to us in writing within 7 business days after receipt of the confirmation. Furthermore JG Wentworth’s policy allows you to cancel at any time and any unearned funds will be returned to you from your dedicated account.
+
+The license number issued by the Florida Department of Agriculture and Consumer Services for the commercial telephone seller is TC5615 and the salesperson TP 108499. Our address is 1200 Morris Drive, Chesterbrook, PA 19087.”
+      </div>
+    </div>
+  </div>
+
+  <!-- POST-QUOTE TAB -->
+  <div id="postQuoteTab" class="tab-content">
+    <div class="card">
+      <h2>Post-Quote Checklist (1–6)</h2>
+      <p class="hint">Use this AFTER they say the quote sounds good. Go straight down the list.</p>
+
+      <h3>1) First Deposit / Pay Date</h3>
+      <div class="quote-highlight">
+“Which paycheck feels safest for the first deposit?”
+      </div>
+      <ul class="checklist">
+        <li><input type="checkbox" /> Confirm pay schedule (weekly / bi-weekly / etc.)</li>
+        <li><input type="checkbox" /> Choose paycheck that feels safest</li>
+        <li><input type="checkbox" /> Set first draft date 7–14 days out</li>
+        <li><input type="checkbox" /> Repeat date back to client</li>
+      </ul>
+
+      <h3>2) Banking Details</h3>
+      <div class="quote-highlight">
+“Grab the checking account you use for bills so we can set up the dedicated account.”
+      </div>
+      <ul class="checklist">
+        <li><input type="checkbox" /> Bank name</li>
+        <li><input type="checkbox" /> Routing number (repeat back)</li>
+        <li><input type="checkbox" /> Account number (repeat back)</li>
+        <li><input type="checkbox" /> Confirm checking (not savings)</li>
+      </ul>
+
+      <h3>3) State Recording</h3>
+      <div class="quote-highlight">
+“Because you’re in [STATE], there’s a specific disclosure/recording I need to play so everything is 100% clear and compliant.”
+      </div>
+      <ul class="checklist">
+        <li><input type="checkbox" /> Check state model (Standard / NSL / Arnold &amp; Smith)</li>
+        <li><input type="checkbox" /> Play correct recording from system</li>
+        <li><input type="checkbox" /> For FL – read FL block before sending agreement</li>
+      </ul>
+
+      <h3>4) Send Agreement</h3>
+      <div class="quote-highlight">
+“I’m going to send the agreement while we’re on the phone so we can go through it together.”
+      </div>
+      <ul class="checklist">
+        <li><input type="checkbox" /> Confirm email address (spell it back)</li>
+        <li><input type="checkbox" /> Confirm cell (if texting link)</li>
+        <li><input type="checkbox" /> Send agreement</li>
+        <li><input type="checkbox" /> Have them refresh inbox / check spam</li>
+      </ul>
+      <h3>5) Sign Together</h3>
+      <div class="quote-highlight">
+“Open that email now and I’ll walk you through the key parts so you’re not guessing.”
+      </div>
+      <ul class="checklist">
+        <li><input type="checkbox" /> Confirm they opened correct document</li>
+        <li><input type="checkbox" /> Highlight deposit, term, fee, cancel-anytime</li>
+        <li><input type="checkbox" /> Have them complete all signature/initial boxes</li>
+        <li><input type="checkbox" /> Confirm they clicked Finish / Submit</li>
+      </ul>
+
+      <h3>6) Explain What Happens Next</h3>
+      <div class="quote-highlight">
+“Let me walk you through exactly what happens next so there are no surprises.”
+      </div>
+      <ul class="checklist">
+        <li><input type="checkbox" /> Explain welcome/onboarding call timing</li>
+        <li><input type="checkbox" /> Reconfirm first draft amount + date</li>
+        <li><input type="checkbox" /> Set expectations about possible creditor calls</li>
+        <li><input type="checkbox" /> Mention portal / statements (if applicable)</li>
+        <li><input type="checkbox" /> Promise follow-up call after first draft</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- STATE SCRIPTS TAB -->
+  <div id="stateTab" class="tab-content">
+    <div class="card">
+      <h2>State Scripts — Quick View</h2>
+      <p class="hint">Use this tab to study or double-check your state language without touching the banking section.</p>
+      <div class="row">
+        <div class="col">
+          <label for="stateSel2">Select State</label>
+          <select id="stateSel2"></select>
+        </div>
+        <div class="col">
+          <label>Mode</label>
+          <div class="badge green" id="modeBadge">Mode: —</div>
+        </div>
+      </div>
+
+      <h3>Recording to Play</h3>
+      <div class="script-box" id="recordingText2">
+Pick a state to see which recording to play (NSL, Standard/AACR, or Arnold &amp; Smith).
+      </div>
+
+      <h3>Full Live Script (Read Word-for-Word)</h3>
+      <div class="quote-highlight" id="liveStateScript2">
+Your full state-specific live script will appear here.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function money(n){
+    if(isNaN(n)) return "$0";
+    return n.toLocaleString(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0});
+  }
+
+  const QUICK_CORE = {
+    open: `“Hey, is this <Name>? Hey <Name>, this is David with JG Wentworth on a recorded line.
+It looks looks like you’d been looking around for some options with your debt — maybe a loan or some kind of relief.
+
+I’m not sure I can actually help yet, but if it’s okay with you, I’d like to ask you a few quick questions about your situation, and then we’ll both see if it even makes sense to do anything.
+
+Would that be alright?”`,
+    impact: `Impact Qs (use 1–2):
+• “How is all of this affecting you month to month?”
+• “Walk me through what it feels like when those due dates hit each month.”
+• “Who else is affected by this besides just you — spouse, kids?”`,
+    consequence: `Consequence Qs (use 1):
+• “If nothing really changes and things stay about the same for the next 12 months, what does that look like for you?”
+• “What worries you the most about staying on this path another year or two?”
+• “Worst case, if there’s an emergency on top of this, what happens?”`,
+    close: `Close:
+“Based on everything we’ve gone over — your situation, what you’ve tried, and these numbers — do you feel like this plan would actually get you out from under this in the timeline you want, or do you feel like it’s not a fit?”
+
+If they say it sounds good:
+“Okay. Where do you feel we should go from here?”
+
+If they say move forward:
+“Perfect. Next step is simple — we’ll grab your banking details for the dedicated account, pick a draft date that doesn’t crush you, and then I’ll send the agreement while we’re on the phone and walk you through it.”`
+  };
+
+  const QUICK_OBJS = {
+    loan: `“Totally fair — loans feel simple.
+
+Quick question — are you trying to hide the balance or actually remove it?
+
+A loan is like pushing dust under a rug. It looks cleaner today, but it’s still there with more interest tomorrow.
+
+If we can lower what’s going out each month without putting a new loan on your back, would you be open to at least seeing what that looks like?”`,
+    think: `“Of course — you don’t make big money decisions in five minutes.
+
+Just so I don’t assume, what specifically do you want to think through — the monthly amount, the impact on your credit, or whether this even works?
+
+Earlier you said if nothing changes in the next 12 months, you’re worried about ___. If we fast-forward and nothing has changed because we didn’t start, how does that put you compared to starting now with a manageable deposit?
+
+If I send this exact plan in writing and it matches what we just talked through, would you feel comfortable moving forward from there?”`,
+    spouse: `“I respect that — this affects both of you.
+
+When they look at this, what will matter most to them — the monthly savings, how fast you’re out, or the impact on credit?
+
+I can send a simple one-page summary showing what you’re paying now, what this would be, and the total savings so you can look at it together.
+
+If that summary matches what we talked about and they see it frees up money and lowers the debt, would you both be okay moving forward?”`,
+    free: `“Great question — I can see why it might look like that from some of the ads.
+
+This isn’t a grant or lottery. Were you hoping for a lump sum of free money, or more money left over in your pocket every month?
+
+What I can help with is the second one — freeing up cash each month by lowering what you’re sending out and actually reducing the balances.
+
+If this puts real money back in your pocket every month and actually moves the balances down, is that still what you’re really looking for?”`,
+    credit: `“I hear you — credit anxiety is real.
+
+Right now, is your credit score helping you, or is it mostly three digits on a screen while the payments drain your cash?
+
+In 12–24 months, would you rather have a slightly higher score and the same debt, or less debt and more savings so lenders actually like your numbers?
+
+If we trade a little short-term score hit for real debt reduction and better savings, is that a move you’d consider?”`
+  };
+
+  const NSL_STATES = new Set([
+    "Connecticut","Delaware","Georgia","Hawaii","Illinois","Kansas",
+    "Maine","Minnesota","New Hampshire","New Jersey","North Dakota",
+    "Ohio","Oregon","Rhode Island","South Carolina","Vermont",
+    "Washington","Washington D.C.","Wisconsin","Wyoming"
+  ]);
+
+  const AS_STATES = new Set(["West Virginia"]);
+  const GLOBAL_HOLDINGS_STATES = new Set(["Minnesota","Nevada","West Virginia","Wisconsin"]);
+
+  const STATES = [
+    "Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware",
+    "Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana",
+    "Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana",
+    "Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina",
+    "North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Puerto Rico","Rhode Island",
+    "South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington",
+    "Washington D.C.","West Virginia","Wisconsin","Wyoming"
+  ];
+  function modeFor(state){
+    if(AS_STATES.has(state)) return "WV";
+    if(NSL_STATES.has(state)) return "NSL";
+    return "STANDARD";
+  }
+
+  function modelFor(state){
+    const m = modeFor(state);
+    if(m === "NSL") return "NSL (Attorney Model)";
+    if(m === "WV") return "Arnold & Smith (Attorney Model)";
+    return "Standard (Non-Attorney)";
+  }
+
+  function feeFor(state){
+    const m = modeFor(state);
+    if(m === "NSL" || m === "WV") return "29%";
+    return "25%";
+  }
+
+  function dedicatedFor(state){
+    return GLOBAL_HOLDINGS_STATES.has(state) ? "Global Holdings" : "CTT / Standard";
+  }
+
+  const STATE_SCRIPTS = {
+    NSL: {
+      header: "NSL – Attorney Model (29%) — Play NSL Confirmation Recording",
+      recordingNote: "Because this is an NSL state, you must play the official NSL Confirmation recording after this disclosure.",
+      script: `“Because you’re in an NSL state, one of the options you qualify for is with New Start Legal, a law firm that provides attorney representation.
+
+They’ve hired JG Wentworth to handle the admin and client service side, while their attorneys oversee your settlements and review the major steps of your program.
+
+The service fee for NSL is 29% of the balances enrolled, already built into the monthly deposit we reviewed — there’s no additional bill on top of that.
+
+I’m now going to play a short New Start Legal confirmation recording that repeats your rights, the fee structure, and the nature of the program.
+
+I’ll stay on the line the whole time. Ready?”`
+    },
+
+    STANDARD: {
+      header: "Standard JGW / AACR – Non-Attorney Model (25%) — Play Standard/AACR Recording",
+      recordingNote: "This is a standard non-attorney JG Wentworth debt resolution program. Play the AACR/ACDR-style recording after this disclosure.",
+      script: `“Since you’re in a standard JG Wentworth state, this is a non-attorney debt resolution program, not a loan and not bankruptcy.
+
+The goal is to help you resolve your unsecured debts for less than what you owe by building up funds in a dedicated savings account in your name and then negotiating directly with your creditors.
+
+Your monthly deposit of $___ and estimated term of ___ months already includes the program fee of __% — there is no extra bill from us.
+
+You stay in control the entire time:
+• No settlement happens without your approval
+• You can cancel at any time
+• Any unearned funds in your dedicated account belong to you
+
+Now I’m going to play a quick compliance recording that confirms everything we just discussed.”`
+    },
+
+    WV: {
+      header: "West Virginia – Arnold & Smith Attorney Model (29%) — Play Arnold & Smith Recording",
+      recordingNote: "In West Virginia you must use the Arnold & Smith disclosure and play the A&S recording.",
+      script: `“Because you’re in West Virginia, your program is handled through Arnold & Smith Law.
+
+I’m an employee of JG Wentworth, and we provide administrative support to Arnold & Smith — things like education, customer service, and coordinating the steps of the program.
+
+Arnold & Smith makes the legal decisions with you, and we carry out the administrative side of the debt resolution process.
+
+This is an attorney model program with a 29% program fee, and the dedicated savings account is through Global Holdings.
+
+You also have the option to opt in to additional legal services for $24.99 per month — completely up to you.
+
+I’ll now play the Arnold & Smith compliance recording so everything is crystal clear.”`
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", function(){
+
+    document.querySelectorAll(".tab-btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const tab = btn.getAttribute("data-tab");
+
+        document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"));
+
+        btn.classList.add("active");
+        document.getElementById(tab).classList.add("active");
+      });
+    });
+
+    document.querySelectorAll(".quick-btn[data-q]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const key = btn.getAttribute("data-q");
+        document.getElementById("quickScript").textContent = QUICK_CORE[key] || "";
+      });
+    });
+
+    document.querySelectorAll(".quick-btn[data-obj]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const key = btn.getAttribute("data-obj");
+        document.getElementById("closeHelper").textContent = QUICK_OBJS[key] || "";
+      });
+    });
+
+    ["enrolledDebt","minPayment","utilPct"].forEach(id=>{
+      document.getElementById(id).addEventListener("input", updateCredit);
+    });
+    updateCredit();
+
+    ["curPayment","newDeposit","progMonths"].forEach(id=>{
+      document.getElementById(id).addEventListener("input", updateBudget);
+    });
+    updateBudget();
+
+    const sel1 = document.getElementById("stateSel");
+    const sel2 = document.getElementById("stateSel2");
+
+    STATES.forEach(s=>{
+      const o1 = document.createElement("option");
+      o1.value = o1.textContent = s;
+      sel1.appendChild(o1);
+
+      const o2 = document.createElement("option");
+      o2.value = o2.textContent = s;
+      sel2.appendChild(o2);
+    });
+
+    sel1.value = "Florida";
+    sel2.value = "Florida";
+
+    sel1.addEventListener("change", updateBankTab);
+    sel2.addEventListener("change", updateStateScriptTab);
+
+    updateBankTab();
+    updateStateScriptTab();
+  });
+
+  function updateCredit(){
+    const debt = Number(document.getElementById("enrolledDebt").value || 0);
+    const min = Number(document.getElementById("minPayment").value || 0);
+    const util = document.getElementById("utilPct").value;
+
+    let t = "“From what I’m seeing here, you’ve got about ";
+    t += debt ? money(debt) : "$____";
+    t += " in total balances, with minimum payments around ";
+    t += min ? money(min) : "$____";
+    t += " a month, and your utilization is sitting at about ";
+    t += util ? util + "%" : "___%";
+    t += ".\n\nThat probably explains why it feels so tight every month.\n\nHow is all of that affecting you right now?”";
+
+    document.getElementById("creditScript").textContent = t;
+  }
+
+  function updateBudget(){
+    const cur = Number(document.getElementById("curPayment").value || 0);
+    const dep = Number(document.getElementById("newDeposit").value || 0);
+    const months = Number(document.getElementById("progMonths").value || 0);
+
+    const ms = Math.max(0, cur - dep);
+    const ts = ms * (months || 0);
+
+    document.getElementById("monthlySavings").textContent = money(ms);
+    document.getElementById("totalSavings").textContent = money(ts);
+
+    const msT = ms ? money(ms) : "$___";
+    const tsT = ts ? money(ts) : "$___";
+    const depT = dep ? money(dep) : "$___";
+    const moT = months || "___";
+
+    const q = `“Based on your balances and your cash flow, instead of taking on another loan,
+we can structure this at about ${moT} months with a monthly deposit of ${depT}.
+
+That would lower what you’re sending out by about ${msT} each month and save roughly ${tsT} over the life of the program compared to the path you’re on now.
+
+How would that feel compared to what you’re doing today?
+
+Is that deposit something you could realistically handle so this actually works for you long term?”`;
+
+    document.getElementById("quoteScript").textContent = q;
+  }
+
+  function updateBankTab(){
+    const state = document.getElementById("stateSel").value;
+    const mode = modeFor(state);
+    const info = STATE_SCRIPTS[mode];
+
+    document.getElementById("modelBadge").textContent = "Model: " + modelFor(state);
+    document.getElementById("feeBadge").textContent = "Fee: " + feeFor(state);
+    document.getElementById("dedBadge").textContent = "Dedicated: " + dedicatedFor(state);
+
+    document.getElementById("recordingText").textContent =
+      info.header + "\n\n" + info.recordingNote + "\n\nNext: Play the correct recording from your system.";
+
+    document.getElementById("liveStateScript").textContent = info.script;
+
+    document.getElementById("flWarning").style.display = (state === "Florida") ? "block" : "none";
+  }
+
+  function updateStateScriptTab(){
+    const state = document.getElementById("stateSel2").value;
+    const mode = modeFor(state);
+    const info = STATE_SCRIPTS[mode];
+
+    document.getElementById("modeBadge").textContent = "Mode: " + modelFor(state);
+    document.getElementById("recordingText2").textContent =
+      info.header + "\n\n" + info.recordingNote + "\n\nThen play the matching recording in your system.";
+    document.getElementById("liveStateScript2").textContent = info.script;
+  }
+</script>
+
+</body>
+</html>
